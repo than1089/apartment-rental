@@ -167,9 +167,13 @@ EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = '/tmp/app-messages'
 
 REST_AUTH_SERIALIZERS = {
-    "USER_DETAILS_SERIALIZER": 'users.serializers.UserSerializer'
+    'USER_DETAILS_SERIALIZER': 'users.serializers.UserSerializer',
+}
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'users.serializers.RegisterSerializer',
 }
 ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 REST_USE_JWT = True

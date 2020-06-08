@@ -20,3 +20,10 @@ class User(AbstractUser):
     )
 
     login_attempts = models.IntegerField(default=0)
+
+    @staticmethod
+    def get_user_by_email_or_none(email):
+        try:
+            return User.objects.get(email=email)
+        except:
+            return
