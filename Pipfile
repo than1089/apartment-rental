@@ -12,6 +12,7 @@ djangorestframework = "*"
 django-cors-headers = "*"
 django-rest-auth = {extras = ["with_social"],version = "*"}
 djangorestframework-jwt = "*"
+django-filter = "*"
 
 [requires]
 python_version = "3.8"
