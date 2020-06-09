@@ -12,10 +12,11 @@ class ApartmentView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        # Admin can view all Apartments
-        if user.role != User.ADMIN:
-            return Apartment.objects.filter(realtor=user)
-        return Apartment.objects.all()
+        # Admins and Realtors can see all appartments
+        if user.role in [User.ADMIN, User.REALTOR]:
+            return Apartment.objects.all()
+
+        return Apartment.objects.filter(status=Apartment.AVAILABLE).all()
 
     def perform_create(self, serializer):
         # When created, owner will be current user
