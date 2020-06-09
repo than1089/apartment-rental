@@ -6,9 +6,9 @@ import { history } from '../../helpers';
 import { alertActions } from '../../redux/actions';
 import { PrivateRoute } from '../../components';
 import { ApartmentListView } from '../ApartmentListView';
-import { UsersPage } from '../UsersPage';
-import { LoginPage } from '../LoginPage';
-import { RegisterPage } from '../RegisterPage';
+import { UserManagement } from '../UserManagement';
+import { Login } from '../Login';
+import { Register } from '../Register';
 
 
 class App extends React.Component {
@@ -32,15 +32,16 @@ class App extends React.Component {
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                  <Link to="/" className="nav-link" role="button">Apartments</Link>
-                  {['Manager', 'Admin'].indexOf(authentication.user.role) !== -1 &&
-                    <Link to="/users" className="nav-link" role="button">Users</Link>
+                  <Link to="/" className="nav-link" role="button">Apartment List</Link>
+                  <Link to="/" className="nav-link" role="button">Apartment Map</Link>
+                  {authentication.user.role === 'Admin' &&
+                    <Link to="/user-management" className="nav-link" role="button">Users</Link>
                   }
                 </Nav>
               </Navbar.Collapse>
               <Navbar.Collapse className="justify-content-end">
                 <Navbar.Text>
-                  Signed in as: <strong>{authentication.user.name}</strong>
+                  Signed in as: <strong>{authentication.user.first_name}</strong>
                 </Navbar.Text>
                 <Link to="/login" className="nav-link" role="button"><i className="fa fa-sign-out" aria-hidden="true"></i></Link>
               </Navbar.Collapse>
@@ -53,9 +54,9 @@ class App extends React.Component {
               }
                 <Switch>
                   <PrivateRoute exact path="/" component={ApartmentListView} />
-                  <PrivateRoute exact path="/users" component={UsersPage} />
-                  <Route path="/login" component={LoginPage} />
-                  <Route path="/register" component={RegisterPage} />
+                  <PrivateRoute exact path="/user-management" component={UserManagement} />
+                  <Route path="/login" component={Login} />
+                  <Route path="/register" component={Register} />
                   <Redirect from="*" to="/" />
                 </Switch>
             </div>

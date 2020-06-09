@@ -3,18 +3,22 @@ import { connect } from 'react-redux';
 import { Button, Form } from 'react-bootstrap';
 import { apartmentActions } from '../../redux/actions';
 
+const initState = {
+  min_size: "",
+  max_size: "",
+  min_price: "",
+  max_price: "",
+  number_of_rooms: "",
+};
 
 class ApartmentFilters extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
-    this.state = {
-      min_size: "",
-      max_size: "",
-      min_price: "",
-      max_price: "",
-      number_of_rooms: "",
-    };
+    if (props.filters) {
+      this.state = props.filters;
+    } else {
+      this.state = initState;
+    }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -151,7 +155,11 @@ class ApartmentFilters extends React.Component {
           </Form.Group>
           <Form.Group className="col-md-2 col-sm-6">
             <Form.Label className="d-sm-block">&nbsp;</Form.Label>
-            <Button variant="primary" type="submit">Find Apartments</Button>
+            <div>
+              <Button variant="primary" type="submit" className="mr-1">Find Apartments</Button>
+              <Button variant="outline-dark"
+                onClick={() => this.setState(initState)}>X</Button>
+            </div>
           </Form.Group>
         </Form.Row>
       </Form>
@@ -160,8 +168,8 @@ class ApartmentFilters extends React.Component {
 }
 
 function mapState(state) {
-  const { apartmentFilter } = state;
-  return { apartmentFilter };
+  const { filters } = state.apartments;
+  return { filters };
 }
 
 const actionCreators = {

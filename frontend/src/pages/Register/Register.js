@@ -12,7 +12,7 @@ const registerCardStyle = {
   marginTop: 50,
 };
 
-class RegisterPage extends React.Component {
+class Register extends React.Component {
   constructor(props) {
     super(props);
 
@@ -148,5 +148,5 @@ const actionCreators = {
   register: userActions.register
 }
 
-const connectedRegisterPage = connect(mapState, actionCreators)(RegisterPage);
-export { connectedRegisterPage as RegisterPage };
+const connectedComponent = connect(mapState, actionCreators)(Register);
+export { connectedComponent as Register };

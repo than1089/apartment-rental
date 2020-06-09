@@ -13,7 +13,7 @@ const loginCardStyle = {
 };
 
 
-class LoginPage extends React.Component {
+class Login extends React.Component {
   constructor(props) {
     super(props);
 
@@ -102,5 +102,5 @@ const actionCreators = {
   logout: userActions.logout
 };
 
-const connectedLoginPage = connect(mapState, actionCreators)(LoginPage);
-export { connectedLoginPage as LoginPage };
+const connectedComponent = connect(mapState, actionCreators)(Login);
+export { connectedComponent as Login };

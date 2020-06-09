@@ -4,9 +4,10 @@ import { Table, Button, Form } from 'react-bootstrap';
 import { userActions } from '../../redux/actions';
 import { UserModal } from './UserModal';
 
-class UsersPage extends React.Component {
+class UserManagement extends React.Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
       modalShow: false,
       editingUser: null,
@@ -71,7 +72,7 @@ class UsersPage extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {users.map((value, index) =>
+            {users.results.map((value, index) =>
               <tr key={index}>
                 <td>{index + 1}</td>
                 <td>{value.first_name}</td>
@@ -100,8 +101,8 @@ class UsersPage extends React.Component {
 
 function mapState(state) {
   return {
-    users: state.users.items || [],
-  };
+    users: state.users
+  }
 }
 
 const actionCreators = {
@@ -109,5 +110,5 @@ const actionCreators = {
   deleteUser: userActions.delete,
 }
 
-const connectedUsersPage = connect(mapState, actionCreators)(UsersPage);
-export { connectedUsersPage as UsersPage };
+const connectedComponent = connect(mapState, actionCreators)(UserManagement);
+export { connectedComponent as UserManagement };

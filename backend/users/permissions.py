@@ -10,7 +10,7 @@ class UserPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         if view.action in ['list', 'create', 'destroy']:
             return request.user and request.user.is_authenticated \
-                and request.user.role in [User.ADMIN, User.MANAGER]
+                and request.user.role in [User.ADMIN]
 
         if view.action == 'register':
             return True

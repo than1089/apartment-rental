@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Badge, Card, Button } from 'react-bootstrap';
 import { apartmentActions } from '../../redux/actions';
 import { ApartmentFilters } from './ApartmentFilters';
+import './ApartmentListView.css';
 
 class ApartmentListView extends React.Component {
   
@@ -39,11 +40,16 @@ class ApartmentListView extends React.Component {
                 </Card.Body>
                 <Card.Footer>
                   <small className="text-muted">Added on {item.created_at}</small>
-                  <Badge variant={item.status === 'Available' ? 'success': 'danger'} className="float-right">{item.status}</Badge>
+                  <Badge variant={item.status === 'Available' ? 'success': 'danger'} className="float-right h-100">{item.status}</Badge>
                 </Card.Footer>
               </Card>
             </div>
           )}
+          {!apartments.results.length &&
+            <div className="col text-center">
+              <h3><i className="far fa-sad-cry" aria-hidden="true"></i> No results found!</h3>
+            </div>
+          }
         </div>
         <div className="pagination mb-3">
           {apartments.previous &&

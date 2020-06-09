@@ -11,7 +11,11 @@ export function apartments(state = {results: []}, action) {
       };
 
     case apartmentConstants.FETCH_ALL_SUCCESS:
-      return action.apartments;
+      return {
+        ...state,
+        loading: false,
+        ...action.apartments
+      }
 
     case apartmentConstants.FETCH_ALL_FAILURE:
     case apartmentConstants.CREATE_FAILURE:
@@ -19,6 +23,7 @@ export function apartments(state = {results: []}, action) {
     case apartmentConstants.DELETE_FAILURE:
       return {
         ...state,
+        loading: false,
         error: action.error,
       };
     case apartmentConstants.FILTER_APARTMENTS:
