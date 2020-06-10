@@ -94,6 +94,18 @@ class UserManagement extends React.Component {
             }
           </tbody>
         </Table>
+        <div className="pagination mb-3">
+          {users.previous &&
+            <Button variant="secondary"
+              onClick={() => this.props.fetchUsers(users.previous)}
+              size="sm" className="mr-2">« Previous</Button>
+          }
+          {users.next &&
+            <Button variant="secondary"
+              onClick={() => this.props.fetchUsers(users.next)}
+              size="sm" className="mr-2">Next »</Button>
+          }
+        </div>
       </div>
     );
   }

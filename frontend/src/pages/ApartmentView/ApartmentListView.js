@@ -40,7 +40,7 @@ class ApartmentListView extends React.Component {
                 </Card.Body>
                 <Card.Footer>
                   <small className="text-muted">Added on {item.created_at}</small>
-                  <Badge variant={item.status === 'Available' ? 'success': 'danger'} className="float-right h-100">{item.status}</Badge>
+                  <Badge variant={item.status === 'Available' ? 'success': 'danger'} className="float-right">{item.status}</Badge>
                 </Card.Footer>
               </Card>
             </div>

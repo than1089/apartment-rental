@@ -19,6 +19,19 @@ export function authentication(state = initialState, action) {
       return {};
     case userConstants.LOGOUT:
       return {};
+    case userConstants.VERIFY_EMAIL_REQUEST:
+      return {
+        ...state,
+        verifyingEmail: true
+      }
+    case userConstants.VERIFY_EMAIL_SUCCESS:
+      return {
+        verifiedEmail: true
+      }
+    case userConstants.VERIFY_EMAIL_FAILURE:
+      return {
+        verifiedEmail: false
+      }
     default:
       return state
   }

@@ -10,8 +10,11 @@ export const userActions = {
   fetchAll,
   create,
   update,
-  delete: _delete
+  delete: _delete,
+  verifyEmail,
 };
+
+const usersPath = '/api/users/';
 
 function login(username, password) {
   return dispatch => {
@@ -62,11 +65,11 @@ function register(user) {
   function failure(error) { return { type: userConstants.REGISTER_FAILURE, error } }
 }
 
-function fetchAll() {
+function fetchAll(url=usersPath) {
   return dispatch => {
     dispatch(request());
 
-    userService.getAll()
+    userService.getAll(url)
       .then(
         users => dispatch(success(users)),
         error => dispatch(failure(error.toString()))
@@ -139,4 +142,24 @@ function _delete(user) {
   function request(user) { return { type: userConstants.DELETE_REQUEST, user } }
   function success(user) { return { type: userConstants.DELETE_SUCCESS, user } }
   function failure(error) { return { type: userConstants.DELETE_FAILURE, error } }
+}
+
+function verifyEmail(key) {
+  return dispatch => {
+    dispatch(request(key));
+
+    userService.verifyEmail(key)
+      .then(
+        () => {
+          dispatch(success());
+        },
+        error => {
+          dispatch(failure(error.toString()));
+        }
+      );
+  };
+
+  function request() { return { type: userConstants.VERIFY_EMAIL_REQUEST } }
+  function success() { return { type: userConstants.VERIFY_EMAIL_SUCCESS } }
+  function failure(error) { return { type: userConstants.VERIFY_EMAIL_FAILURE, error } }
 }

@@ -5,8 +5,9 @@ import { Navbar, Nav } from 'react-bootstrap'
 import { history } from '../../helpers';
 import { alertActions } from '../../redux/actions';
 import { PrivateRoute } from '../../components';
-import { ApartmentListView } from '../ApartmentListView';
+import { ApartmentListView, ApartmentMapView } from '../ApartmentView';
 import { UserManagement } from '../UserManagement';
+import { VerifyEmail } from '../VerifyEmail';
 import { Login } from '../Login';
 import { Register } from '../Register';
 
@@ -32,10 +33,10 @@ class App extends React.Component {
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                  <Link to="/" className="nav-link" role="button">Apartment List</Link>
-                  <Link to="/" className="nav-link" role="button">Apartment Map</Link>
+                  <Link to="/" className="nav-link" role="button">List View</Link>
+                  <Link to="/map" className="nav-link" role="button">Map View</Link>
                   {authentication.user.role === 'Admin' &&
-                    <Link to="/user-management" className="nav-link" role="button">Users</Link>
+                    <Link to="/user-management" className="nav-link" role="button">User Management</Link>
                   }
                 </Nav>
               </Navbar.Collapse>
@@ -54,9 +55,11 @@ class App extends React.Component {
               }
                 <Switch>
                   <PrivateRoute exact path="/" component={ApartmentListView} />
+                  <PrivateRoute exact path="/map" component={ApartmentMapView} />
                   <PrivateRoute exact path="/user-management" component={UserManagement} />
                   <Route path="/login" component={Login} />
                   <Route path="/register" component={Register} />
+                  <Route path="/verify-email/" component={VerifyEmail} />
                   <Redirect from="*" to="/" />
                 </Switch>
             </div>

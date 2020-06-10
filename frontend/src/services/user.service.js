@@ -9,6 +9,7 @@ export const userService = {
     create,
     update,
     delete: _delete,
+    verifyEmail,
 };
 
 async function login(email, password) {
@@ -30,13 +31,13 @@ function logout() {
     localStorage.removeItem('token');
 }
 
-async function getAll() {
+async function getAll(url) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
 
-    const response = await fetch(`/api/users`, requestOptions);
+    const response = await fetch(url, requestOptions);
     return handleResponse(response);
 }
 
@@ -90,5 +91,16 @@ async function _delete(user) {
     };
 
     const response = await fetch(`/api/users/${user.id}`, requestOptions);
+    return handleResponse(response);;
+}
+
+async function verifyEmail(key) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({key})
+    };
+
+    const response = await fetch('/rest-auth/registration/verify-email/', requestOptions);
     return handleResponse(response);;
 }
