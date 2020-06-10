@@ -14,9 +14,10 @@ def user_login_failed_callback(sender, credentials, **kwargs):
 
     user.login_attempts += 1
     limit_login_attempts = 3
-    if user.is_active and user.login_attempts >= limit_login_attempts:
-        user.is_active = False
-        user.save()
+    if user.login_attempts >= limit_login_attempts:
+        if user.is_active:
+            user.is_active = False
+            user.save()
         raise exceptions.ValidationError('You failed {} login attempts. \
             Please contact admin@example.com to unblock your account.'.format(limit_login_attempts))
     user.save()

@@ -31,7 +31,7 @@ urlpatterns = [
     url(r'^rest-auth/', include('rest_auth.urls')),
     url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
     url(r'^rest-auth/registration/account-email-verification-sent/', null_view, name='account_email_verification_sent'),
-    url(r'^rest-auth/registration/account-confirm-email/', null_view, name='account_confirm_email'),
+    url(r'^account-confirm-email/(?P<key>[-:\w]+)/$', null_view, name='account_confirm_email'),
     url(r'^rest-auth/facebook/$', FacebookLogin.as_view(), name='fb_login'),
     url(r'^rest-auth/twitter/$', TwitterLogin.as_view(), name='twitter_login'),
 ]
