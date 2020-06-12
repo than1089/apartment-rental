@@ -1,8 +1,7 @@
 from allauth.socialaccount.providers.facebook.views import \
     FacebookOAuth2Adapter
-from allauth.socialaccount.providers.twitter.views import TwitterOAuthAdapter
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from rest_auth.registration.views import SocialLoginView
-from rest_auth.social_serializers import TwitterLoginSerializer
 from rest_framework import status, viewsets
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
@@ -36,6 +35,5 @@ def null_view(request):
 class FacebookLogin(SocialLoginView):
     adapter_class = FacebookOAuth2Adapter
 
-class TwitterLogin(SocialLoginView):
-    serializer_class = TwitterLoginSerializer
-    adapter_class = TwitterOAuthAdapter
+class GoogleLogin(SocialLoginView):
+    adapter_class = GoogleOAuth2Adapter

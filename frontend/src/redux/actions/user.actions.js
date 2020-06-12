@@ -12,6 +12,7 @@ export const userActions = {
   update,
   delete: _delete,
   verifyEmail,
+  loginSocial,
 };
 
 const usersPath = '/api/users/';
@@ -163,3 +164,25 @@ function verifyEmail(key) {
   function success() { return { type: userConstants.VERIFY_EMAIL_SUCCESS } }
   function failure(error) { return { type: userConstants.VERIFY_EMAIL_FAILURE, error } }
 }
+
+function loginSocial(provider, accessToken) {
+  return dispatch => {
+    dispatch(request());
+
+    userService.loginSocial(provider, accessToken)
+      .then(
+        (auth) => {
+          dispatch(success(auth.user));
+          history.push('/');
+        },
+        error => {
+          dispatch(failure(error.toString()));
+        }
+      );
+  };
+
+  function request() { return { type: userConstants.LOGIN_SOCIAL_REQUEST } }
+  function success(user) { return { type: userConstants.LOGIN_SOCIAL_SUCCESS, user } }
+  function failure(error) { return { type: userConstants.LOGIN_SOCIAL_FAILURE, error } }
+}
+

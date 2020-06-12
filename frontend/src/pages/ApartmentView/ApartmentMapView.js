@@ -11,9 +11,6 @@ const mapContainerStyle = {
   margin: 'auto'
 };
 
-const options = {
-  imagePath: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m"
-};
 class ApartmentMapView extends React.Component {
   map = null;
   infoWindow = null;
@@ -86,7 +83,9 @@ class ApartmentMapView extends React.Component {
   }
 
   getApartmentInfo(apartment) {
-    return `${apartment.address}<br>
+    return `
+      <h6>${apartment.name}</h6>
+      <p>${apartment.address}</p>
       <strong>
       $${apartment.price_per_month}/month &nbsp;&nbsp;
       ${apartment.floor_area_size} m2 &nbsp;&nbsp;

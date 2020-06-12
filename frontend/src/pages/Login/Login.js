@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Button, Form } from 'react-bootstrap';
 import { validateEmail } from '../../helpers/utils';
 import { userActions } from '../../redux/actions';
+import SocialButton from './SocialButton';
 
 const loginCardStyle = {
   maxWidth: 400,
@@ -27,6 +28,9 @@ class Login extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.onLoginSuccess = this.onLoginSuccess.bind(this);
+    this.onLoginFailure = this.onLoginFailure.bind(this);
   }
 
   handleChange(e) {
@@ -42,6 +46,14 @@ class Login extends React.Component {
     if (email && validateEmail(email) && password) {
       this.props.login(email, password);
     }
+  }
+
+  onLoginSuccess(provider, response) {
+    this.props.loginSocial(provider, response.token.accessToken);
+  }
+
+  onLoginFailure(error) {
+    console.log(error);
   }
 
   render() {
@@ -84,6 +96,30 @@ class Login extends React.Component {
                 <Link to="/register" className="btn btn-link">Register</Link>
               </Form.Group>
             </Form>
+            <div className="row">
+              <div className="col">
+                <SocialButton
+                  provider='facebook'
+                  appId={process.env.REACT_APP_FB_APP_ID}
+                  onLoginSuccess={(response) => this.onLoginSuccess('facebook', response)}
+                  onLoginFailure={this.onLoginFailure}
+                  className="btn btn-sm w-100" style={{backgroundColor: '#3b5998', color: '#fff'}}
+                >
+                  <i className="fab fa-facebook-f"></i> Login with Facebook
+                </SocialButton>
+              </div>
+              <div className="col">
+                <SocialButton
+                  provider='google'
+                  appId="991063285873-kesas583im0d1jmpv1r0fi88u8cpaarb.apps.googleusercontent.com"
+                  onLoginSuccess={(response) => this.onLoginSuccess('google', response)}
+                  onLoginFailure={this.onLoginFailure}
+                  className="btn btn-sm w-100" style={{backgroundColor: '#db3236', color: '#fff'}}
+                >
+                  <i class="fab fa-google"></i> Login with Google
+                </SocialButton>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -98,7 +134,8 @@ function mapState(state) {
 
 const actionCreators = {
   login: userActions.login,
-  logout: userActions.logout
+  logout: userActions.logout,
+  loginSocial: userActions.loginSocial,
 };
 
 const connectedComponent = connect(mapState, actionCreators)(Login);

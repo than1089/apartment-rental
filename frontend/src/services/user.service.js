@@ -10,6 +10,7 @@ export const userService = {
     update,
     delete: _delete,
     verifyEmail,
+    loginSocial,
 };
 
 async function login(email, password) {
@@ -21,14 +22,13 @@ async function login(email, password) {
 
     const response = await fetch(`rest-auth/login/`, requestOptions);
     const auth = await handleResponse(response);
-    // store jwt value into localstorage
-    localStorage.setItem('auth', JSON.stringify(auth));
+    storeAuth(auth);
     return auth;
 }
 
 function logout() {
     // remove token from local storage to log user out
-    localStorage.removeItem('token');
+    localStorage.removeItem('auth');
 }
 
 async function getAll(url) {
@@ -103,4 +103,21 @@ async function verifyEmail(key) {
 
     const response = await fetch('/rest-auth/registration/verify-email/', requestOptions);
     return handleResponse(response);;
+}
+
+async function loginSocial(provider, accessToken) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({access_token: accessToken})
+    };
+
+    const response = await fetch(`/rest-auth/${provider}/`, requestOptions);
+    const auth = await handleResponse(response);
+    storeAuth(auth);
+    return auth;
+}
+
+function storeAuth(auth) {
+    localStorage.setItem('auth', JSON.stringify(auth));
 }

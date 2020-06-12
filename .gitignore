@@ -3,6 +3,7 @@
 *.py[co]
 .tox/
 .DS_Store
+.env
 __pycache__
 MANIFEST
 dist/

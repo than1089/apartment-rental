@@ -20,18 +20,23 @@ from rest_framework.response import Response
 from rest_framework.routers import SimpleRouter
 
 from apartments.views import ApartmentView
-from users.views import FacebookLogin, TwitterLogin, UserView, null_view
+from users.views import FacebookLogin, GoogleLogin, UserView, null_view
+from users.social_views import FacebookConnect, TwitterConnect
 
 router = SimpleRouter()
 router.register(r'apartments', ApartmentView)
 router.register(r'users', UserView)
 
 urlpatterns = [
-    url('api/', include(router.urls)),
+    url(r'^admin/', admin.site.urls),
+    url(r'api/', include(router.urls)),
     url(r'^rest-auth/', include('rest_auth.urls')),
     url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
     url(r'^rest-auth/registration/account-email-verification-sent/', null_view, name='account_email_verification_sent'),
     url(r'^account-confirm-email/(?P<key>[-:\w]+)/$', null_view, name='account_confirm_email'),
     url(r'^rest-auth/facebook/$', FacebookLogin.as_view(), name='fb_login'),
-    url(r'^rest-auth/twitter/$', TwitterLogin.as_view(), name='twitter_login'),
+    url(r'^rest-auth/google/$', GoogleLogin.as_view(), name='twitter_login'),
+    url(r'^rest-auth/facebook/connect/$', FacebookConnect.as_view(), name='fb_connect'),
+    url(r'^rest-auth/twitter/connect/$', TwitterConnect.as_view(), name='twitter_connect'),
+    url(r'^accounts/', include('allauth.urls'), name='socialaccount_signup'),
 ]

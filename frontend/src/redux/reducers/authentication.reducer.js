@@ -32,6 +32,18 @@ export function authentication(state = initialState, action) {
       return {
         verifiedEmail: false
       }
+    case userConstants.LOGIN_SOCIAL_REQUEST:
+      return {
+        ...state,
+        FBLoggingIn: true
+      }
+    case userConstants.LOGIN_SOCIAL_SUCCESS:
+      return {
+        loggedIn: true,
+        user: action.user
+      }
+    case userConstants.LOGIN_SOCIAL_FAILURE:
+      return {}
     default:
       return state
   }
