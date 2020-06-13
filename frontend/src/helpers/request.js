@@ -2,16 +2,19 @@ import { userService } from '../services/user.service';
 import { history } from '../helpers/history';
 
 export function handleResponse(response) {
-    return response.json().then(json => {
+    return response.text().then(text => {
         if (!response.ok) {
             if (response.status === 401 && !window.location.pathname.match(/^\/login/)) {
                 // auto logout if 401 response returned from api
                 userService.logout();
                 history.push('/login');
             }
-
-            return Promise.reject(json);
+            return Promise.reject(JSON.parse(text));
         }
-        return json;
+        try {
+            return JSON.parse(text);
+        } catch (error) {
+            return {};
+        }
     });
 }

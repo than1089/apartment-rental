@@ -1,0 +1,7 @@
+Hi there,
+
+An admin from Apartment Rentals has invited you to join the app.
+If you are interested, please follow this link to complete your registration:
+http://localhost:3000/register?email={{email}}
+
+Thank you!

@@ -11,7 +11,7 @@ class Apartment(models.Model):
     ]
 
     name = models.CharField(max_length=255)
-    description = models.TextField(null=True)
+    description = models.TextField(blank=True, null=True)
     floor_area_size = models.DecimalField(max_digits=9, decimal_places=2)
     price_per_month = models.DecimalField(max_digits=9, decimal_places=2)
     number_of_rooms = models.SmallIntegerField()

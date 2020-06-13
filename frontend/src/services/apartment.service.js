@@ -23,27 +23,27 @@ async function create(Apartment) {
         body: JSON.stringify(Apartment),
     };
 
-    const response = await fetch(`/api/apartments`, requestOptions);
+    const response = await fetch(`/api/apartments/`, requestOptions);
     return await handleResponse(response);
 }
 
-async function update(Apartment) {
+async function update(apartment) {
     const requestOptions = {
         method: 'PUT',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify(Apartment),
+        body: JSON.stringify(apartment),
     };
 
-    const response = await fetch(`/api/apartments/${Apartment.id}`, requestOptions);
+    const response = await fetch(`/api/apartments/${apartment.id}`, requestOptions);
     return await handleResponse(response);
 }
 
-async function _delete(Apartment) {
+async function _delete(apartment) {
     const requestOptions = {
         method: 'DELETE',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
     };
 
-    const response = await fetch(`/api/apartments/${Apartment.id}`, requestOptions);
+    const response = await fetch(`/api/apartments/${apartment.id}`, requestOptions);
     return await handleResponse(response);
 }

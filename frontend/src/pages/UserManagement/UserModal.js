@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { userActions } from '../../redux/actions';
+import { isValidEmail } from '../../helpers/utils';
 
 const initState = {
   user: {
@@ -71,18 +72,19 @@ class UserModal extends React.Component {
     this.setState({ submitted: true });
 
     const user = Object.assign({}, this.state.user);
-    if (this.state.addingUser && user.first_name && user.last_name && user.email &&
-      user.username && user.password) {
+    if (this.state.addingUser && user.first_name && user.last_name && isValidEmail(user.email) && user.password && user.password.length >= 6) {
       delete user.id;
       this.props.createUser(user);
       this.setState({ ...initState });
       this.props.onHide();
     }
 
-    if (!this.state.addingUser && user.first_name && user.last_name &&
-      user.email) {
+    if (!this.state.addingUser && user.first_name && user.last_name) {
       if (!user.password) {
         delete user.password;
+      }
+      if (user.password && user.password.length < 6) {
+        return;
       }
       this.props.updateUser(user);
       this.setState({ ...initState });
@@ -92,6 +94,7 @@ class UserModal extends React.Component {
 
   render() {
     const { user, submitted, addingUser } = this.state;
+    const { authentication } = this.props;
     return (
       <Modal
         {...this.props}
@@ -122,36 +125,32 @@ class UserModal extends React.Component {
                 <Form.Control.Feedback type="invalid">Last Name is required</Form.Control.Feedback>
               }
             </Form.Group>
-
-            <Form.Group controlId="email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control type="text" isInvalid={submitted && !user.email}
-                placeholder="Email" name="email" autoComplete="off"
-                onChange={this.handleChange} value={user.email} />
-              {submitted && !user.email &&
-                <Form.Control.Feedback type="invalid">Email is required</Form.Control.Feedback>
-              }
-            </Form.Group>
-
             {addingUser &&
-              <Form.Group controlId="username">
-                <Form.Label>Username</Form.Label>
-                <Form.Control type="text" isInvalid={submitted && !user.username}
-                  placeholder="username" name="username" autoComplete="off"
-                  onChange={this.handleChange} value={user.username} />
-                {submitted && !user.username &&
-                  <Form.Control.Feedback type="invalid">Username is required</Form.Control.Feedback>
+              <Form.Group controlId="email">
+                <Form.Label>Email</Form.Label>
+                <Form.Control type="text" isInvalid={submitted && (!user.email || !isValidEmail(user.email))}
+                  placeholder="Email" name="email" autoComplete="off"
+                  onChange={this.handleChange} value={user.email} />
+                {submitted && !user.email &&
+                  <Form.Control.Feedback type="invalid">Email is required</Form.Control.Feedback>
+                }
+                {submitted && user.email && !isValidEmail(user.email) &&
+                  <Form.Control.Feedback type="invalid">Email is invalid</Form.Control.Feedback>
                 }
               </Form.Group>
             }
 
             <Form.Group controlId="password">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" isInvalid={submitted && addingUser && !user.password}
+              <Form.Control type="password"
+                isInvalid={submitted && ((addingUser && !user.password) || (user.password && user.password.length < 6))}
                 placeholder="Password" name="password" autoComplete="off"
                 onChange={this.handleChange} value={user.password || ''} />
               {submitted && addingUser && !user.password &&
                 <Form.Control.Feedback type="invalid">Password is required</Form.Control.Feedback>
+              }
+              {submitted && user.password && user.password.length < 6 &&
+                <Form.Control.Feedback type="invalid">Password must have at least 6 characters.</Form.Control.Feedback>
               }
               {!addingUser &&
                 <span className="text-info">Leave empty to keep previous password.</span>
@@ -161,17 +160,17 @@ class UserModal extends React.Component {
             <Form.Group controlId="role">
               <Form.Label>Role</Form.Label>
               <Form.Control as="select" custom value={user.role} name="role" onChange={this.handleChange}>
-                <option value="Regular">Regular</option>
-                <option value="Manager">Manager</option>
+                <option value="Client">Client</option>
+                <option value="Realtor">Realtor</option>
                 <option value="Admin">Admin</option>
               </Form.Control>
             </Form.Group>
-
-            <Form.Group controlId="active">
-              <Form.Check type="switch" label="Is Active" name="is_active" checked={user.is_active}
-                onChange={this.handleSwitch} />
-            </Form.Group>
-
+            {authentication.user.id !== user.id &&
+              <Form.Group controlId="active">
+                <Form.Check type="switch" label="Is Active" name="is_active" checked={user.is_active}
+                  onChange={this.handleSwitch} />
+              </Form.Group>
+            }
           </Modal.Body>
           <Modal.Footer>
             <Button variant="primary" type="submit">
@@ -185,10 +184,14 @@ class UserModal extends React.Component {
   }
 }
 
+function mapState(state) {
+  return {authentication: state.authentication};
+}
+
 const actionCreators = {
   createUser: userActions.create,
   updateUser: userActions.update,
 }
 
-const connectedUserModal = connect(null, actionCreators)(UserModal);
-export { connectedUserModal as UserModal };
+const connectedComponent = connect(mapState, actionCreators)(UserModal);
+export { connectedComponent as UserModal };

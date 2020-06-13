@@ -6,24 +6,19 @@ class UserSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(required=False)
     last_name = serializers.CharField(required=False)
     email = serializers.CharField(required=True)
-    username = serializers.CharField(required=True)
     password = serializers.CharField(max_length=128, required=True, write_only=True)
     role = serializers.CharField(required=False)
     is_active = serializers.BooleanField(default=True)
+    login_attempts = serializers.IntegerField(read_only=True)
+    verified_email = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'username', 'password', 'role', 'is_active']
-    
-    def save(self, request):
-        return None
-
-    def create(self, validated_data):
-        self.validate_role(validated_data['role'])
-        return User.objects.create_user(**validated_data)
+        fields = ['id', 'first_name', 'last_name', 'email', 'password',
+            'role', 'is_active', 'login_attempts', 'verified_email']
 
     def update(self, instance, validated_data):
-        for field in ['first_name', 'last_name', 'email', 'username', 'role', 'is_active']:
+        for field in ['first_name', 'last_name', 'email', 'role', 'is_active']:
             if field in validated_data:
                 setattr(instance, field, validated_data.get(field))
 
@@ -31,7 +26,10 @@ class UserSerializer(serializers.ModelSerializer):
             instance.set_password(validated_data.get('password'))
         instance.save()
         return instance
-
+    
+    def get_verified_email(self, obj):
+        email_address = obj.emailaddress_set.get(email=obj.email)
+        return email_address.verified
 
 
 class RegisterSerializer(serializers.Serializer):
@@ -75,3 +73,7 @@ class RegisterSerializer(serializers.Serializer):
 
     def save(self, request):
         return User.objects.create_user(**self.get_validated_data())
+
+
+class InviteUserSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)

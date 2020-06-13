@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button, Form } from 'react-bootstrap';
-import { validateEmail } from '../../helpers/utils';
+import { isValidEmail } from '../../helpers/utils';
 
 import { userActions } from '../../redux/actions';
 
@@ -16,11 +16,14 @@ class Register extends React.Component {
   constructor(props) {
     super(props);
 
+    const search = props.location.search;
+    const params = new URLSearchParams(search);
+    const email = params.get('email') || '';
     this.state = {
       user: {
         first_name: '',
         last_name: '',
-        email: '',
+        email,
         role: 'Client',
         password: '',
         confirm_password: '',
@@ -55,7 +58,7 @@ class Register extends React.Component {
   }
 
   validateForm(user) {
-    return user.email && validateEmail(user.email)
+    return user.email && isValidEmail(user.email)
       && user.password && user.password === user.confirm_password && user.password.length >= 6
   }
 
@@ -80,13 +83,13 @@ class Register extends React.Component {
 
               <Form.Group controlId="email">
                 <Form.Control type="text"
-                  isInvalid={submitted && (!user.email || !validateEmail(user.email))}
+                  isInvalid={submitted && (!user.email || !isValidEmail(user.email))}
                   placeholder="Email" name="email" autoComplete="off"
                   onChange={this.handleChange} value={user.email}/>
                 {submitted && !user.email &&
                   <Form.Control.Feedback type="invalid">Email is required</Form.Control.Feedback>
                 }
-                {submitted && user.email && !validateEmail(user.email) &&
+                {submitted && user.email && !isValidEmail(user.email) &&
                   <Form.Control.Feedback type="invalid">Email is invalid</Form.Control.Feedback>
                 }
               </Form.Group>

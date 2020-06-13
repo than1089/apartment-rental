@@ -1,15 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { ApartmentActions } from '../../redux/actions';
+import { apartmentActions } from '../../redux/actions';
 
 const initState = {
-  Apartment: {
+  apartment: {
     id: -1,
-    destination: '',
-    start_date: '',
-    end_date: '',
-    comment: '',
+    name: '',
+    description: '',
+    price_per_month: '',
+    number_of_rooms: '',
+    floor_area_size: '',
+    address: '',
+    status: 'Available',
+    lat: '',
+    lng: '',
   },
   submitted: false,
   addingApartment: true,
@@ -26,16 +31,16 @@ class ApartmentModal extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    const Apartment = props.Apartment;
+    const apartment = props.apartment;
 
-    if (Apartment && Apartment.id !== state.Apartment.id) {
+    if (apartment && apartment.id !== state.apartment.id) {
       return {
-        Apartment,
+        apartment,
         submitted: false,
         addingApartment: false,
       }
     }
-    if (!Apartment && state.Apartment.id !== -1) {
+    if (!apartment && state.apartment.id !== -1) {
       return initState;
     }
     return null;
@@ -43,40 +48,34 @@ class ApartmentModal extends React.Component {
 
   handleChange(event) {
     const { name, value } = event.target;
-    const { Apartment } = this.state;
+    const { apartment } = this.state;
     this.setState({
-      Apartment: {
-        ...Apartment,
+      apartment: {
+        ...apartment,
         [name]: value
       }
     });
   }
 
-  isValidEndDate() {
-    const Apartment = this.state.Apartment;
-    const startTime = new Date(Apartment.start_date).getTime();
-    const endTime = new Date(Apartment.end_date).getTime();
-    return endTime >= startTime;
-  }
-
   handleSubmit(e) {
     e.preventDefault();
     this.setState({ submitted: true });
-    const Apartment = Object.assign({}, this.state.Apartment);
-    console.log(Apartment)
-    if (Apartment.destination && Apartment.start_date && Apartment.end_date && this.isValidEndDate()) {
-      if (Apartment.id !== -1) {
-        this.props.updateApartment(Apartment);
+    const apartment = Object.assign({}, this.state.apartment);
+
+    if (apartment.name && apartment.floor_area_size && apartment.price_per_month && apartment.address &&
+      apartment.status && apartment.lat && apartment.lng) {
+      if (apartment.id !== -1) {
+        this.props.updateApartment(apartment);
       } else {
-        delete Apartment.id;
-        this.props.createApartment(Apartment);
+        delete apartment.id;
+        this.props.createApartment(apartment);
       }
       this.setState({...initState});
       this.props.onHide();
     }
   }
   render() {
-    const { Apartment, submitted, addingApartment } = this.state;
+    const { apartment, submitted, addingApartment } = this.state;
     return (
       <Modal
         {...this.props}
@@ -88,44 +87,80 @@ class ApartmentModal extends React.Component {
         </Modal.Header>
         <Form onSubmit={this.handleSubmit}>
           <Modal.Body>
-              <Form.Group controlId="destination">
-                <Form.Label>Destination</Form.Label>
-                <Form.Control type="text" isInvalid={submitted && !Apartment.destination}
-                  placeholder="Apartment Destination" name="destination"
-                  onChange={this.handleChange} value={Apartment.destination}/>
-                {submitted && !Apartment.destination &&
-                  <Form.Control.Feedback type="invalid">Destination is required</Form.Control.Feedback>
+              <Form.Group controlId="name">
+                <Form.Label>Name</Form.Label>
+                <Form.Control type="text" isInvalid={submitted && !apartment.name}
+                  placeholder="Name" name="name"
+                  onChange={this.handleChange} value={apartment.name}/>
+                {submitted && !apartment.name &&
+                  <Form.Control.Feedback type="invalid">Name is required</Form.Control.Feedback>
                 }
               </Form.Group>
 
-              <Form.Group controlId="startDate">
-                <Form.Label>Start Date</Form.Label>
-                <Form.Control type="date" isInvalid={submitted && !Apartment.start_date}
-                  placeholder="Start Date" name="start_date"
-                  onChange={this.handleChange} value={Apartment.start_date}/>
-                {submitted && !Apartment.start_date &&
-                  <Form.Control.Feedback type="invalid">Start Date is required</Form.Control.Feedback>
+              <Form.Group controlId="description">
+                <Form.Label>Description</Form.Label>
+                <Form.Control as="textarea" placeholder="Description" name="description"
+                  onChange={this.handleChange} value={apartment.description}/>
+              </Form.Group>
+
+              <Form.Group controlId="price_per_month">
+                <Form.Label>Price per month ($)</Form.Label>
+                <Form.Control type="number" isInvalid={submitted && !apartment.price_per_month}
+                  placeholder="Price per month" name="price_per_month"
+                  onChange={this.handleChange} value={apartment.price_per_month}/>
+                {submitted && !apartment.price_per_month &&
+                  <Form.Control.Feedback type="invalid">Price per month is required</Form.Control.Feedback>
                 }
               </Form.Group>
 
-              <Form.Group controlId="endDate">
-                <Form.Label>End Date</Form.Label>
-                <Form.Control type="date" isInvalid={submitted && (!Apartment.end_date || !this.isValidEndDate())}
-                  placeholder="Start Date" name="end_date"
-                  onChange={this.handleChange} value={Apartment.end_date}/>
-                {submitted && !Apartment.end_date &&
-                  <Form.Control.Feedback type="invalid">End Date is required</Form.Control.Feedback>
-                }
-                {submitted && !this.isValidEndDate() &&
-                  <Form.Control.Feedback type="invalid">End Date must be greater or equal to Start Date</Form.Control.Feedback>
+              <Form.Group controlId="number_of_rooms">
+                <Form.Label>Number of rooms</Form.Label>
+                <Form.Control type="number" isInvalid={submitted && !apartment.number_of_rooms}
+                  placeholder="Number of rooms" name="number_of_rooms"
+                  onChange={this.handleChange} value={apartment.number_of_rooms}/>
+                {submitted && !apartment.number_of_rooms &&
+                  <Form.Control.Feedback type="invalid">Number of rooms is required</Form.Control.Feedback>
                 }
               </Form.Group>
 
-              <Form.Group controlId="comment">
-                <Form.Label>Comment</Form.Label>
-                <Form.Control  as="textarea" rows="3"
-                  placeholder="Comment" name="comment"
-                  onChange={this.handleChange} value={Apartment.comment}/>
+              <Form.Group controlId="floor_area_size">
+                <Form.Label>Floor area size (m2)</Form.Label>
+                <Form.Control type="number" isInvalid={submitted && !apartment.floor_area_size}
+                  placeholder="Floor area size" name="floor_area_size"
+                  onChange={this.handleChange} value={apartment.floor_area_size}/>
+                {submitted && !apartment.floor_area_size &&
+                  <Form.Control.Feedback type="invalid">Floor area size is required</Form.Control.Feedback>
+                }
+              </Form.Group>
+
+              <Form.Group controlId="address">
+                <Form.Label>Address</Form.Label>
+                <Form.Control type="text" isInvalid={submitted && !apartment.address}
+                  placeholder="Address" name="address"
+                  onChange={this.handleChange} value={apartment.address}/>
+                {submitted && !apartment.address &&
+                  <Form.Control.Feedback type="invalid">Address is required</Form.Control.Feedback>
+                }
+              </Form.Group>
+
+              <Form.Group controlId="lat">
+                <Form.Label>Latitude</Form.Label>
+                <Form.Control type="text" isInvalid={submitted && !apartment.lat}
+                  placeholder="Latitude" name="lat"
+                  onChange={this.handleChange} value={apartment.lat}/>
+                {submitted && !apartment.lat &&
+                  <Form.Control.Feedback type="invalid">Latitude is required</Form.Control.Feedback>
+                }
+              </Form.Group>
+
+              <Form.Group controlId="lng">
+                <Form.Label>Longitude</Form.Label>
+                <Form.Control type="text" isInvalid={submitted && !apartment.lng}
+                  placeholder="Longitude" name="lng"
+                  onChange={this.handleChange} value={apartment.lng}/>
+                {submitted && !apartment.lng &&
+                  <Form.Control.Feedback type="invalid">Longitude is required</Form.Control.Feedback>
+                }
               </Form.Group>
         
           </Modal.Body>
@@ -142,9 +177,9 @@ class ApartmentModal extends React.Component {
 }
 
 const actionCreators = {
-  createApartment: ApartmentActions.create,
-  updateApartment: ApartmentActions.update,
+  createApartment: apartmentActions.create,
+  updateApartment: apartmentActions.update,
 }
 
-const connectedApartmentModal = connect(null, actionCreators)(ApartmentModal);
-export { connectedApartmentModal as ApartmentModal };
+const connectedComponent = connect(null, actionCreators)(ApartmentModal);
+export { connectedComponent as ApartmentModal };

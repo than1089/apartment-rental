@@ -35,7 +35,7 @@ export function authentication(state = initialState, action) {
     case userConstants.LOGIN_SOCIAL_REQUEST:
       return {
         ...state,
-        FBLoggingIn: true
+        loggingIn: true,
       }
     case userConstants.LOGIN_SOCIAL_SUCCESS:
       return {

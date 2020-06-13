@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button, Form } from 'react-bootstrap';
-import { validateEmail } from '../../helpers/utils';
+import { isValidEmail } from '../../helpers/utils';
 import { userActions } from '../../redux/actions';
 import SocialButton from './SocialButton';
 
@@ -43,7 +43,7 @@ class Login extends React.Component {
 
     this.setState({ submitted: true });
     const { email, password } = this.state;
-    if (email && validateEmail(email) && password) {
+    if (email && isValidEmail(email) && password) {
       this.props.login(email, password);
     }
   }
@@ -67,13 +67,13 @@ class Login extends React.Component {
             <Form onSubmit={this.handleSubmit}>
               <Form.Group controlId="email">
                 <Form.Label>Email</Form.Label>
-                <Form.Control type="text" isInvalid={submitted && (!email || !validateEmail(email))}
+                <Form.Control type="text" isInvalid={submitted && (!email || !isValidEmail(email))}
                   placeholder="email" name="email"
                   onChange={this.handleChange} value={email} />
                 {submitted && !email &&
                   <Form.Control.Feedback type="invalid">Email is required</Form.Control.Feedback>
                 }
-                {submitted && email && !validateEmail(email) &&
+                {submitted && email && !isValidEmail(email) &&
                   <Form.Control.Feedback type="invalid">Email is invalid</Form.Control.Feedback>
                 }
               </Form.Group>

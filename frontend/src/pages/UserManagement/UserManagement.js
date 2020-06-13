@@ -3,18 +3,20 @@ import { connect } from 'react-redux';
 import { Table, Button, Form } from 'react-bootstrap';
 import { userActions } from '../../redux/actions';
 import { UserModal } from './UserModal';
+import { InviteUserModal } from './InviteUserModal';
+import { Pagination } from '../../components';
 
 class UserManagement extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
-      modalShow: false,
+      userModalShow: false,
+      inviteModalShow: false,
       editingUser: null,
     };
 
     this.resetModal = this.resetModal.bind(this);
-    this.setEditingUser = this.setEditingUser.bind(this);
+    this.editUser = this.editUser.bind(this);
   }
   componentDidMount() {
     this.props.fetchUsers();
@@ -22,99 +24,103 @@ class UserManagement extends React.Component {
 
   resetModal() {
     this.setState({
-      modalShow: false,
+      userModalShow: false,
       editingUser: null,
     });
   }
 
-  setEditingUser(index) {
+  editUser(user) {
     this.setState({
-      editingUser: Object.assign({}, this.props.users[index]),
-      modalShow: true,
+      editingUser: user,
+      userModalShow: true,
     });
   }
 
-  deleteUser(index) {
+  deleteUser(user) {
     const ok = window.confirm('Are you sure you want to delete this user?');
     if (ok) {
-      this.props.deleteUser(this.props.users[index]);
+      this.props.deleteUser(user);
     }
   }
 
   render() {
-    const { users } = this.props;
-    const { modalShow, editingUser } = this.state;
+    const { users, authentication } = this.props;
+    const { userModalShow, inviteModalShow, editingUser } = this.state;
     return (
       <div>
-        <h2 className="mb-4">Users Management</h2>
+        <h2 className="mb-4">User Management</h2>
         <div className="mb-3">
-          <Button variant="outline-primary" size="sm"
-            onClick={() => this.setState({ modalShow: true })}>
+          <Button variant="outline-primary mr-2" size="sm"
+            onClick={() => this.setState({ userModalShow: true })}>
             Add User <i className="fas fa-plus"></i>
+          </Button>
+          <Button variant="outline-primary mr-2" size="sm"
+            onClick={() => this.setState({ inviteModalShow: true })}>
+            Invite New User <i className="fas fa-envelop"></i>
           </Button>
         </div>
         <UserModal
-          show={modalShow}
+          show={userModalShow}
           onHide={() => this.resetModal()}
           user={editingUser}
+        />
+        <InviteUserModal
+          show={inviteModalShow}
+          onHide={() => this.setState({inviteModalShow: false})}
         />
         <Table bordered hover size="sm">
           <thead>
             <tr>
-              <th>#</th>
               <th>First Name</th>
               <th>Last Name</th>
-              <th>Username</th>
               <th>Email</th>
               <th>Role</th>
               <th className="text-center">Active</th>
+              <th className="text-center">Email Verified</th>
               <th className="text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {users.results.map((value, index) =>
+            {users.results.map((user, index) =>
               <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{value.first_name}</td>
-                <td>{value.last_name}</td>
-                <td>{value.username}</td>
-                <td>{value.email}</td>
-                <td>{value.role}</td>
+                <td>{user.first_name}</td>
+                <td>{user.last_name}</td>
+                <td>{user.email}</td>
+                <td>{user.role}</td>
                 <td className="text-center">
-                  <Form.Check type="switch" label="" disabled checked={value.is_active} />
+                  <Form.Check type="switch" label="" disabled checked={user.is_active} />
                 </td>
-                <td className="text-center" style={{whiteSpace: 'nowrap'}}>
-                  <Button size="sm" variant="outline-danger mr-1" onClick={() => this.deleteUser(index)}>
-                    <i className="fa fa-trash"></i></Button>
-                  <Button size="sm" variant="outline-secondary" onClick={() => this.setEditingUser(index)}>
+                <td className="text-center">
+                  <Form.Check type="switch" label="" disabled checked={user.verified_email} />
+                </td>
+                <td style={{whiteSpace: 'nowrap'}} className="text-center">
+                  <Button size="sm" variant="outline-secondary mr-2" onClick={() => this.editUser(user)}>
                     <i className="fa fa-pencil"></i></Button>
+                  {authentication.user.id !== user.id &&
+                    <Button size="sm" variant="outline-danger" onClick={() => this.deleteUser(user)}>
+                      <i className="fa fa-trash"></i></Button>
+                  }
+                  {authentication.user.id === user.id && <span style={{width: 32, display: 'inline-block'}}></span>}
                 </td>
               </tr>
             )
             }
           </tbody>
         </Table>
-        <div className="pagination mb-3">
-          {users.previous &&
-            <Button variant="secondary"
-              onClick={() => this.props.fetchUsers(users.previous)}
-              size="sm" className="mr-2">« Previous</Button>
-          }
-          {users.next &&
-            <Button variant="secondary"
-              onClick={() => this.props.fetchUsers(users.next)}
-              size="sm" className="mr-2">Next »</Button>
-          }
-        </div>
+        <Pagination
+          count={users.count}
+          next={users.next}
+          previous={users.previous}
+          fetch={this.props.fetchUsers}
+        />
       </div>
     );
   }
 }
 
 function mapState(state) {
-  return {
-    users: state.users
-  }
+  const {users, authentication} = state;
+  return {users, authentication};
 }
 
 const actionCreators = {

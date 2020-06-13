@@ -41,7 +41,7 @@ function create(apartment) {
         apartment => dispatch(success(apartment)),
         error => {
           dispatch(failure(error.toString()));
-          dispatch(alertActions.error(error.toString()));
+          dispatch(alertActions.error(error));
         }
       );
   };
@@ -61,8 +61,8 @@ function update(apartment) {
           dispatch(success(apartment))
         },
         error => {
-          dispatch(failure(error.toString()));
-          dispatch(alertActions.error(error.toString()));
+          dispatch(failure(error));
+          dispatch(alertActions.error(error));
         }
       );
   };
@@ -82,8 +82,8 @@ function _delete(apartment) {
           dispatch(success(apartment))
         },
         error => {
-          dispatch(failure(error.toString()));
-          dispatch(alertActions.error(error.toString()));
+          dispatch(failure(error));
+          dispatch(alertActions.error(error));
         }
       );
   };

@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Badge, Card, Button } from 'react-bootstrap';
+import { Badge, Card } from 'react-bootstrap';
 import { apartmentActions } from '../../redux/actions';
 import { ApartmentFilters } from './ApartmentFilters';
+import { Pagination } from '../../components';
 import './ApartmentListView.css';
 
 class ApartmentListView extends React.Component {
@@ -20,7 +21,7 @@ class ApartmentListView extends React.Component {
         <hr/>
         <div className="row">
           {apartments.results.map((item, index) => 
-            <div className="col-lg-4 col-md-6 col-sm-12 card-deck mb-4" key={index}>
+            <div className="col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-4 d-flex" key={index}>
               <Card>
                 <Card.Body className="d-flex flex-column">
                   <Card.Title>{item.name}</Card.Title>
@@ -39,7 +40,7 @@ class ApartmentListView extends React.Component {
                   </div>
                 </Card.Body>
                 <Card.Footer>
-                  <small className="text-muted">Added on {item.created_at}</small>
+                  <small className="text-muted">Added on {(new Date(item.created_at)).toLocaleDateString()}</small>
                   <Badge variant={item.status === 'Available' ? 'success': 'danger'} className="float-right">{item.status}</Badge>
                 </Card.Footer>
               </Card>
@@ -51,18 +52,12 @@ class ApartmentListView extends React.Component {
             </div>
           }
         </div>
-        <div className="pagination mb-3">
-          {apartments.previous &&
-            <Button variant="secondary"
-              onClick={() => this.props.fetchApartments(apartments.previous)}
-              size="sm" className="mr-2">« Previous</Button>
-          }
-          {apartments.next &&
-            <Button variant="secondary"
-              onClick={() => this.props.fetchApartments(apartments.next)}
-              size="sm" className="mr-2">Next »</Button>
-          }
-        </div>
+        <Pagination
+          count={apartments.count}
+          next={apartments.next}
+          previous={apartments.previous}
+          fetch={this.props.fetchApartments}
+        />
       </div>
     );
   }

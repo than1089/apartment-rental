@@ -13,6 +13,7 @@ export const userActions = {
   delete: _delete,
   verifyEmail,
   loginSocial,
+  invite,
 };
 
 const usersPath = '/api/users/';
@@ -28,7 +29,7 @@ function login(username, password) {
           history.push('/');
         },
         error => {
-          dispatch(failure(error.toString()));
+          dispatch(failure(error));
           dispatch(alertActions.error(error));
         }
       );
@@ -50,7 +51,7 @@ function register(user) {
 
     userService.register(user)
       .then(
-        response => {
+        () => {
           dispatch(success());
           dispatch(alertActions.success("Register successfully. Please check your inbox to verify your email address."));
         },
@@ -73,7 +74,7 @@ function fetchAll(url=usersPath) {
     userService.getAll(url)
       .then(
         users => dispatch(success(users)),
-        error => dispatch(failure(error.toString()))
+        error => dispatch(failure(error))
       );
   };
 
@@ -86,14 +87,16 @@ function create(user) {
   return dispatch => {
     dispatch(request(user));
 
-    userService.create(user)
+    userService.register(user)
       .then(
         user => {
           dispatch(success(user));
+          dispatch(fetchAll());
+          dispatch(alertActions.success('Created successfully. User needs to verify their email before logging in.'));
         },
         error => {
-          dispatch(failure(error.toString()));
-          dispatch(alertActions.error(error.toString()));
+          dispatch(failure(error));
+          dispatch(alertActions.error(error));
         }
       );
   };
@@ -111,10 +114,11 @@ function update(user) {
       .then(
         user => {
           dispatch(success(user));
+          dispatch(alertActions.success('Updated successfully!'));
         },
         error => {
-          dispatch(failure(error.toString()));
-          dispatch(alertActions.error(error.toString()));
+          dispatch(failure(error));
+          dispatch(alertActions.error(error));
         }
       );
   };
@@ -132,10 +136,12 @@ function _delete(user) {
       .then(
         () => {
           dispatch(success(user));
+          dispatch(fetchAll());
+          dispatch(alertActions.success('Deleted successfully.'));
         },
         error => {
-          dispatch(failure(error.toString()));
-          dispatch(alertActions.error(error.toString()));
+          dispatch(failure(error));
+          dispatch(alertActions.error(error));
         }
       );
   };
@@ -176,7 +182,8 @@ function loginSocial(provider, accessToken) {
           history.push('/');
         },
         error => {
-          dispatch(failure(error.toString()));
+          dispatch(failure(error));
+          dispatch(alertActions.error('Login failed. This email may be registered by another method. Please change your login method.'));
         }
       );
   };
@@ -184,5 +191,27 @@ function loginSocial(provider, accessToken) {
   function request() { return { type: userConstants.LOGIN_SOCIAL_REQUEST } }
   function success(user) { return { type: userConstants.LOGIN_SOCIAL_SUCCESS, user } }
   function failure(error) { return { type: userConstants.LOGIN_SOCIAL_FAILURE, error } }
+}
+
+function invite(email) {
+  return dispatch => {
+    dispatch(request());
+
+    userService.invite(email)
+      .then(
+        () => {
+          dispatch(success());
+          dispatch(alertActions.success("Invitation sent!"));
+        },
+        error => {
+          dispatch(failure(error));
+          dispatch(alertActions.error(error));
+        }
+      );
+  };
+
+  function request() { return { type: userConstants.INVITE_USER_REQUEST } }
+  function success() { return { type: userConstants.INVITE_USER_SUCCESS } }
+  function failure(error) { return { type: userConstants.INVITE_USER_FAILURE, error } }
 }
 

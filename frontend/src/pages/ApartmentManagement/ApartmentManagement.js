@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Table, Button } from 'react-bootstrap';
-import { ApartmentModal, ApartmentFilters } from '.';
-import { ApartmentActions } from '../../redux/actions';
+import { ApartmentModal } from '.';
+import { apartmentActions } from '../../redux/actions';
+import { Pagination } from '../../components';
 
 class ApartmentManagement extends React.Component {
   constructor(props) {
@@ -60,7 +61,6 @@ class ApartmentManagement extends React.Component {
             onClick={() => this.setState({modalShow: true})}>
               Add Apartment <i className="fas fa-plus"></i>
           </Button>
-          <ApartmentFilters />
         </div>
         <ApartmentModal
           show={modalShow}
@@ -70,34 +70,51 @@ class ApartmentManagement extends React.Component {
         <Table bordered hover size="sm">
           <thead>
             <tr>
-              <th>#</th>
               <th>Name</th>
-              <th>Description</th>
-              <th>Floor Area Size</th>
-              <th>Price Per Month</th>
-              <th>Number of Rooms</th>
+              <th width="15%">Description</th>
+              <th>Price ($)</th>
+              <th className="text-center">Rooms</th>
+              <th>Size (m2)</th>
               {currentRole === 'Admin' &&
-              <th>Realtor</th>
+              <th width="12%">Realtor</th>
               }
-              <th>Address</th>
+              <th width="15%">Address</th>
+              <th>Status</th>
               <th className="text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {apartments.results.map((item, index) => 
+            {apartments.results.map((apartment, index) => 
                 <tr key={index}>
-                  <td>{index + 1}</td>
+                  <td>{apartment.name}</td>
+                  <td>{apartment.description}</td>
+                  <td>{apartment.price_per_month}</td>
+                  <td className="text-center">{apartment.number_of_rooms}</td>
+                  <td>{apartment.floor_area_size}</td>
+                  {currentRole === 'Admin' &&
+                    <td>{apartment.realtor}</td>
+                  }
+                  <td>{apartment.address}</td>
+                  <td>{apartment.status}</td>
                   <td></td>
                 </tr>
               )
             }
             {!apartments.results.length && 
               <tr>
-                <td colSpan="8" className="text-center">Opps! You have no Apartments yet.</td> 
+                <td colSpan={auth.user.role === 'Admin' ? 9 : 8} className="text-center">
+                  Opps! You have no apartments yet.
+                </td> 
               </tr>
             }
           </tbody>
         </Table>
+        <Pagination
+          count={apartments.count}
+          next={apartments.next}
+          previous={apartments.previous}
+          fetch={this.props.fetchApartments}
+        />
       </div>
     );
   }
@@ -111,9 +128,8 @@ function mapState(state) {
 }
 
 const actionCreators = {
-  fetchApartments: ApartmentActions.fetchAll,
-  deleteApartment: ApartmentActions.delete,
-  setFilter: ApartmentActions.setFilter,
+  fetchApartments: apartmentActions.fetchAll,
+  deleteApartment: apartmentActions.delete,
 }
 
 const connectedComponent = connect(mapState, actionCreators)(ApartmentManagement);

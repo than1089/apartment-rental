@@ -6,6 +6,7 @@ import { history } from '../../helpers';
 import { alertActions } from '../../redux/actions';
 import { PrivateRoute } from '../../components';
 import { ApartmentListView, ApartmentMapView } from '../ApartmentView';
+import { ApartmentManagement } from '../ApartmentManagement';
 import { UserManagement } from '../UserManagement';
 import { VerifyEmail } from '../VerifyEmail';
 import { Login } from '../Login';
@@ -29,7 +30,7 @@ class App extends React.Component {
         <div className="wrapper">
           {authentication.user && !authentication.loggingIn &&
             <Navbar bg="dark" variant="dark" expand="lg" className="mb-4">
-              <Navbar.Brand>Apartments Rental</Navbar.Brand>
+              <Navbar.Brand>Apartment Rentals</Navbar.Brand>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
@@ -37,6 +38,9 @@ class App extends React.Component {
                   <Link to="/map" className="nav-link" role="button">Map View</Link>
                   {authentication.user.role === 'Admin' &&
                     <Link to="/user-management" className="nav-link" role="button">User Management</Link>
+                  }
+                  {['Admin', 'Realtor'].indexOf(authentication.user.role) !== -1 &&
+                    <Link to="/apartment-management" className="nav-link" role="button">Apartment Management</Link>
                   }
                 </Nav>
               </Navbar.Collapse>
@@ -57,6 +61,7 @@ class App extends React.Component {
                   <PrivateRoute exact path="/" component={ApartmentListView} />
                   <PrivateRoute exact path="/map" component={ApartmentMapView} />
                   <PrivateRoute exact path="/user-management" component={UserManagement} />
+                  <PrivateRoute exact path="/apartment-management" component={ApartmentManagement} />
                   <Route path="/login" component={Login} />
                   <Route path="/register" component={Register} />
                   <Route path="/verify-email/" component={VerifyEmail} />

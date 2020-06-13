@@ -6,11 +6,11 @@ export const userService = {
     register,
     getAll,
     getById,
-    create,
     update,
     delete: _delete,
     verifyEmail,
     loginSocial,
+    invite,
 };
 
 async function login(email, password) {
@@ -26,9 +26,16 @@ async function login(email, password) {
     return auth;
 }
 
-function logout() {
-    // remove token from local storage to log user out
+async function logout() {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    };
+
+    await fetch(`rest-auth/logout/`, requestOptions);
+    
     localStorage.removeItem('auth');
+    return true;
 }
 
 async function getAll(url) {
@@ -62,17 +69,6 @@ async function register(user) {
     return handleResponse(response);
 }
 
-async function create(user) {
-    const requestOptions = {
-        method: 'POST',
-        headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify(user)
-    };
-
-    const response = await fetch(`/api/users`, requestOptions);
-    return handleResponse(response);
-}
-
 async function update(user) {
     const requestOptions = {
         method: 'PATCH',
@@ -80,7 +76,7 @@ async function update(user) {
         body: JSON.stringify(user)
     };
 
-    const response = await fetch(`/api/users/${user.id}`, requestOptions);
+    const response = await fetch(`/api/users/${user.id}/`, requestOptions);
     return handleResponse(response);;
 }
 
@@ -91,7 +87,7 @@ async function _delete(user) {
     };
 
     const response = await fetch(`/api/users/${user.id}`, requestOptions);
-    return handleResponse(response);;
+    return handleResponse(response);
 }
 
 async function verifyEmail(key) {
@@ -120,4 +116,15 @@ async function loginSocial(provider, accessToken) {
 
 function storeAuth(auth) {
     localStorage.setItem('auth', JSON.stringify(auth));
+}
+
+async function invite(email) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+    };
+
+    const response = await fetch(`/api/users/invite/`, requestOptions);
+    return await handleResponse(response)
 }
