@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { userActions } from '../../redux/actions';
 import { isValidEmail } from '../../helpers/utils';
 
 const initState = {
@@ -188,10 +187,5 @@ function mapState(state) {
   return {authentication: state.authentication};
 }
 
-const actionCreators = {
-  createUser: userActions.create,
-  updateUser: userActions.update,
-}
-
-const connectedComponent = connect(mapState, actionCreators)(UserModal);
+const connectedComponent = connect(mapState, null)(UserModal);
 export { connectedComponent as UserModal };

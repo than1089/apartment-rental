@@ -19,7 +19,9 @@ function fetchAll(url=apartmentsPath) {
 
     apartmentService.fetchAll(url)
       .then(
-        apartments => dispatch(success(apartments)),
+        apartments => {
+          dispatch(success(apartments));
+        },
         error => {
           dispatch(failure(error));
           dispatch(alertActions.error(error));
@@ -38,9 +40,13 @@ function create(apartment) {
 
     apartmentService.create(apartment)
       .then(
-        apartment => dispatch(success(apartment)),
+        apartment => {
+          dispatch(success(apartment));
+          dispatch(alertActions.success('Created successfully!'));
+          dispatch(fetchAll());
+        },
         error => {
-          dispatch(failure(error.toString()));
+          dispatch(failure(error));
           dispatch(alertActions.error(error));
         }
       );

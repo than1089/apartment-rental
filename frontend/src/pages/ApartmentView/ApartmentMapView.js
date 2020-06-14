@@ -119,7 +119,7 @@ const actionCreators = {
 };
 
 const WrapperedMap = GoogleApiWrapper({
-  apiKey: 'AIzaSyAcx8hA2LcYGHRkLFVrQ7Xdzw7L3EQA5go'
+  apiKey: process.env.REACT_APP_GG_MAP_API_KEY
 })(ApartmentMapView);
 
 const connectedComponent = connect(mapState, actionCreators)(WrapperedMap);

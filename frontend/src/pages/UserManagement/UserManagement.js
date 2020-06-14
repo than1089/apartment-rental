@@ -63,6 +63,8 @@ class UserManagement extends React.Component {
           show={userModalShow}
           onHide={() => this.resetModal()}
           user={editingUser}
+          createUser={this.props.createUser}
+          updateUser={this.props.updateUser}
         />
         <InviteUserModal
           show={inviteModalShow}
@@ -125,6 +127,8 @@ function mapState(state) {
 
 const actionCreators = {
   fetchUsers: userActions.fetchAll,
+  createUser: userActions.create,
+  updateUser: userActions.update,
   deleteUser: userActions.delete,
 }
 

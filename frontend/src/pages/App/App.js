@@ -55,7 +55,14 @@ class App extends React.Component {
           <div className="container-fluid">
             <div className="col">
               {alert.message &&
-                <div className={`alert ${alert.type}`}>{alert.message}</div>
+                <div className={`alert ${alert.type}`}>
+                  {alert.message}
+                  <button type="button" class="close"
+                    data-dismiss="alert" aria-label="Close"
+                    onClick={this.props.clearAlerts}>
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
               }
                 <Switch>
                   <PrivateRoute exact path="/" component={ApartmentListView} />

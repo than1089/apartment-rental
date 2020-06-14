@@ -111,12 +111,12 @@ class Login extends React.Component {
               <div className="col">
                 <SocialButton
                   provider='google'
-                  appId="991063285873-kesas583im0d1jmpv1r0fi88u8cpaarb.apps.googleusercontent.com"
+                  appId={process.env.REACT_APP_GG_APP_ID}
                   onLoginSuccess={(response) => this.onLoginSuccess('google', response)}
                   onLoginFailure={this.onLoginFailure}
                   className="btn btn-sm w-100" style={{backgroundColor: '#db3236', color: '#fff'}}
                 >
-                  <i class="fab fa-google"></i> Login with Google
+                  <i className="fab fa-google"></i> Login with Google
                 </SocialButton>
               </div>
             </div>

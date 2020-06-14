@@ -23,13 +23,12 @@ class ApartmentManagement extends React.Component {
   resetModal() {
     this.setState({
       modalShow: false,
-      editingApartment: null,
     });
   }
 
   setEditingApartment(index) {
     this.setState({
-      editingApartment: Object.assign({}, this.props.Apartments[index]),
+      editingApartment: Object.assign({}, this.props.apartments[index]),
       modalShow: true,
     });
   }
@@ -37,16 +36,8 @@ class ApartmentManagement extends React.Component {
   deleteApartment(index) {
     const ok = window.confirm('Are you sure you want to delete this Apartment?');
     if (ok) {
-      this.props.deleteApartment(this.props.Apartments[index]);
+      this.props.deleteApartment(this.props.apartments[index]);
     }
-  }
-
-  getDaysToStart(startDate) {
-    const differentTime = (new Date(startDate)).getTime() - (new Date()).getTime();
-    if (differentTime > 0) {
-      return Math.ceil(differentTime / (1000 * 3600 * 24)); 
-    }
-    return '-';
   }
 
   render() {
@@ -58,14 +49,16 @@ class ApartmentManagement extends React.Component {
         <h2 className="mb-4">Apartments Management</h2>
         <div className="mb-3 clearfix">
           <Button variant="outline-primary" size="sm"
-            onClick={() => this.setState({modalShow: true})}>
+            onClick={() => this.setState({modalShow: true, editingApartment: null})}>
               Add Apartment <i className="fas fa-plus"></i>
           </Button>
         </div>
         <ApartmentModal
           show={modalShow}
           onHide={() => this.resetModal()}
-          Apartment={editingApartment}
+          apartment={editingApartment}
+          createApartment={this.props.createApartment}
+          updateApartment={this.props.updateApartment}
         />
         <Table bordered hover size="sm">
           <thead>
@@ -129,6 +122,8 @@ function mapState(state) {
 
 const actionCreators = {
   fetchApartments: apartmentActions.fetchAll,
+  createApartment: apartmentActions.create,
+  updateApartment: apartmentActions.update,
   deleteApartment: apartmentActions.delete,
 }
 
