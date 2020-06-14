@@ -28,6 +28,7 @@ class ApartmentModal extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSwitch = this.handleSwitch.bind(this);
     this.handlgeAddressChange = this.handlgeAddressChange.bind(this);
   }
   
@@ -55,33 +56,36 @@ class ApartmentModal extends React.Component {
     if (!mapElement) {
       return;
     }
+    const google = this.props.google;
+  
+    // Place map back into the placeholder when the Modal hide and show.
     if (mapElement && this.map) {
       mapElement.parentNode.replaceChild(this.map.getDiv(), mapElement);
+      // Place marker into apartment position
+      this.setMarker();
       return;
     }
-    const google = this.props.google;
     this.geocoder = new google.maps.Geocoder();
     this.map = new google.maps.Map(mapElement, {
       center: { lat: 10.76289, lng: 106.67311 },
       zoom: 16
     });
     this.marker = new google.maps.Marker({map: this.map, draggable: true}); 
+    this.setMarker();
     this.marker.addListener('dragend', (marker) => {
       this.setApartmentPosition(marker.latLng);
     });
-
-    this.getCurrentLocation();
   }
 
-  getCurrentLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        const center = new this.props.google.maps.LatLng({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        });
-        this.map.setCenter(center);
-      });
+  setMarker() {
+    const lat = Number(this.state.apartment.lat);
+    const lng = Number(this.state.apartment.lng);
+    if (this.marker && lat && lng) {
+      const position = new this.props.google.maps.LatLng({lat, lng});
+      this.marker.setPosition(position);
+      this.map.setCenter(position);
+    } else if (this.marker) {
+      this.marker.setPosition(null);
     }
   }
 
@@ -92,6 +96,16 @@ class ApartmentModal extends React.Component {
       apartment: {
         ...apartment,
         [name]: value
+      }
+    });
+  }
+
+  handleSwitch(e) {
+    const status = e.target.checked ? 'Available' : 'Rented';
+    this.setState({
+      apartment: {
+        ...this.state.apartment,
+        status
       }
     });
   }
@@ -204,7 +218,10 @@ class ApartmentModal extends React.Component {
                     <Form.Control.Feedback type="invalid">Floor area size is required</Form.Control.Feedback>
                   }
                 </Form.Group>
-
+                <Form.Group controlId="available">
+                  <Form.Check type="switch" label="Is Available" name="status" checked={apartment.status === 'Available'}
+                    onChange={this.handleSwitch} />
+                </Form.Group>
               </div>
               <div className="col">
                 <Form.Group controlId="address">
@@ -236,7 +253,7 @@ class ApartmentModal extends React.Component {
                   }
                 </Form.Group>
 
-                <div id="map" style={{widht: '100%', height: 200}}></div>
+                <div id="map" style={{widht: '100%', height: 220}}></div>
               </div>
             </div>
           </Modal.Body>

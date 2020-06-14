@@ -4,7 +4,9 @@ export function isValidEmail(email) {
 }
 
 export function buildSearchURL(url, searchObject) {
-    const searchParams = new URLSearchParams();
+    const splitUrl = url.split('?');
+    url = splitUrl[0];
+    const searchParams = new URLSearchParams(splitUrl[1]);
     for (const key in searchObject) {
         if (searchObject.hasOwnProperty(key)) {
             const value = searchObject[key];

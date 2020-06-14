@@ -1,6 +1,6 @@
 import { apartmentConstants } from '../actionTypes';
 
-export function apartments(state = {results: []}, action) {
+export function apartments(state = {results: [], base_path: '/api/apartments/'}, action) {
   switch (action.type) {
     case apartmentConstants.FETCH_ALL_REQUEST:
     case apartmentConstants.UPDATE_REQUEST:
@@ -30,6 +30,11 @@ export function apartments(state = {results: []}, action) {
       return {
         ...state,
         filters: action.filters
+      }
+    case apartmentConstants.SET_BASE_PATH:
+      return {
+        ...state,
+        base_path: action.path
       }
     default:
       return state

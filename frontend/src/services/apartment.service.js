@@ -34,7 +34,7 @@ async function update(apartment) {
         body: JSON.stringify(apartment),
     };
 
-    const response = await fetch(`/api/apartments/${apartment.id}`, requestOptions);
+    const response = await fetch(`/api/apartments/${apartment.id}/`, requestOptions);
     return await handleResponse(response);
 }
 

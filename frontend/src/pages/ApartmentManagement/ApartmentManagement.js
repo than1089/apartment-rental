@@ -14,29 +14,37 @@ class ApartmentManagement extends React.Component {
     };
 
     this.resetModal = this.resetModal.bind(this);
-    this.setEditingApartment = this.setEditingApartment.bind(this);
+    this.editApartment = this.editApartment.bind(this);
   }
   componentDidMount() {
+    const user = this.props.auth.user;
+    if (user.role === 'Realtor') {
+      this.props.setBasePath(`/api/apartments/?realtor=${user.id}`);
+    }
     this.props.fetchApartments();
   }
-  
+
+  componentWillUnmount() {
+    this.props.setBasePath(`/api/apartments/`);
+  }
+
   resetModal() {
     this.setState({
       modalShow: false,
     });
   }
 
-  setEditingApartment(index) {
+  editApartment(apartment) {
     this.setState({
-      editingApartment: Object.assign({}, this.props.apartments[index]),
+      editingApartment: apartment,
       modalShow: true,
     });
   }
 
-  deleteApartment(index) {
+  deleteApartment(apartment) {
     const ok = window.confirm('Are you sure you want to delete this Apartment?');
     if (ok) {
-      this.props.deleteApartment(this.props.apartments[index]);
+      this.props.deleteApartment(apartment);
     }
   }
 
@@ -46,7 +54,7 @@ class ApartmentManagement extends React.Component {
     const currentRole = auth.user.role;
     return (
       <div>
-        <h2 className="mb-4">Apartments Management</h2>
+        <h2 className="mb-4">Apartment Management</h2>
         <div className="mb-3 clearfix">
           <Button variant="outline-primary" size="sm"
             onClick={() => this.setState({modalShow: true, editingApartment: null})}>
@@ -72,7 +80,7 @@ class ApartmentManagement extends React.Component {
               <th width="12%">Realtor</th>
               }
               <th width="15%">Address</th>
-              <th>Status</th>
+              <th className="text-center">Status</th>
               <th className="text-center">Actions</th>
             </tr>
           </thead>
@@ -88,8 +96,17 @@ class ApartmentManagement extends React.Component {
                     <td>{apartment.realtor}</td>
                   }
                   <td>{apartment.address}</td>
-                  <td>{apartment.status}</td>
-                  <td></td>
+                  <td className="text-center">
+                    <span className={'badge badge-' + (apartment.status === 'Available' ? 'success' : 'danger')}>
+                      {apartment.status}
+                    </span>
+                  </td>
+                  <td style={{whiteSpace: 'nowrap'}} className="text-center">
+                    <Button size="sm" variant="outline-secondary mr-2" onClick={() => this.editApartment(apartment)}>
+                      <i className="fa fa-pencil"></i></Button>
+                    <Button size="sm" variant="outline-danger" onClick={() => this.deleteApartment(apartment)}>
+                      <i className="fa fa-trash"></i></Button>
+                </td>
                 </tr>
               )
             }
@@ -125,6 +142,7 @@ const actionCreators = {
   createApartment: apartmentActions.create,
   updateApartment: apartmentActions.update,
   deleteApartment: apartmentActions.delete,
+  setBasePath: apartmentActions.setBasePath,
 }
 
 const connectedComponent = connect(mapState, actionCreators)(ApartmentManagement);

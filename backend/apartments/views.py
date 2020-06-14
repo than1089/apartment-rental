@@ -7,9 +7,11 @@ from users.models import User
 from .models import Apartment
 from .serializers import ApartmentSerializer
 from .filters import ApartmentFilter
+from .permissions import ApartmentPermission
+
 
 class ApartmentView(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,ApartmentPermission)
     serializer_class = ApartmentSerializer
     queryset = Apartment.objects.all()
     filterset_class = ApartmentFilter

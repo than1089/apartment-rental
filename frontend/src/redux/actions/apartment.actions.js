@@ -2,10 +2,11 @@ import { apartmentConstants } from '../actionTypes';
 import { apartmentService } from '../../services';
 import { alertActions } from '.';
 import { buildSearchURL } from '../../helpers/utils';
+import { store } from '../../helpers/store';
 
-const apartmentsPath = '/api/apartments/';
 
 export const apartmentActions = {
+  setBasePath,
   fetchAll,
   create,
   update,
@@ -13,10 +14,23 @@ export const apartmentActions = {
   filterApartments,
 };
 
-function fetchAll(url=apartmentsPath) {
+function setBasePath(path){
+  return {
+    type: apartmentConstants.SET_BASE_PATH,
+    path
+  }
+}
+
+function getBasePath() {
+  return store.getState().apartments.base_path;
+}
+
+function fetchAll(url=null) {
   return dispatch => {
     dispatch(request());
-
+    if (!url) {
+      url = getBasePath();
+    }
     apartmentService.fetchAll(url)
       .then(
         apartments => {
@@ -64,7 +78,9 @@ function update(apartment) {
     apartmentService.update(apartment)
       .then(
         apartment => {
-          dispatch(success(apartment))
+          dispatch(success(apartment));
+          dispatch(alertActions.success('Updated successfully!'));
+          dispatch(fetchAll());
         },
         error => {
           dispatch(failure(error));
@@ -85,7 +101,9 @@ function _delete(apartment) {
     apartmentService.delete(apartment)
       .then(
         () => {
-          dispatch(success(apartment))
+          dispatch(success(apartment));
+          dispatch(alertActions.success('Deleted successfully!'));
+          dispatch(fetchAll());
         },
         error => {
           dispatch(failure(error));
@@ -102,7 +120,7 @@ function _delete(apartment) {
 function filterApartments(filters) {
   return dispatch => {
     dispatch(setFilters(filters));
-    const url = buildSearchURL(apartmentsPath, filters);
+    const url = buildSearchURL(getBasePath(), filters);
     dispatch(fetchAll(url));
   }
   function setFilters(filters) { return { type: apartmentConstants.FILTER_APARTMENTS, filters } }

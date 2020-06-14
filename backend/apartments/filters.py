@@ -11,7 +11,7 @@ class ApartmentFilter(filters.FilterSet):
 
     class Meta:
         model = Apartment
-        fields = ['min_size', 'max_size', 'min_price', 'max_price', 'number_of_rooms']
+        fields = ['min_size', 'max_size', 'min_price', 'max_price', 'number_of_rooms', 'realtor']
 
     @property
     def qs(self):
