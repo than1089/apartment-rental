@@ -20,6 +20,8 @@ class ApartmentManagement extends React.Component {
     const user = this.props.auth.user;
     if (user.role === 'Realtor') {
       this.props.setBasePath(`/api/apartments/?realtor=${user.id}`);
+    } else {
+      this.props.setBasePath(`/api/apartments/`);
     }
     this.props.fetchApartments();
   }

@@ -147,6 +147,7 @@ class ApartmentModal extends React.Component {
 
     if (apartment.name && apartment.floor_area_size && apartment.price_per_month && apartment.address &&
       apartment.status && apartment.lat && apartment.lng) {
+      delete apartment.realtor;
       if (apartment.id !== -1) {
         this.props.updateApartment(apartment);
       } else {

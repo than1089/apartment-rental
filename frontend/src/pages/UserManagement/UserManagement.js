@@ -90,10 +90,20 @@ class UserManagement extends React.Component {
                 <td>{user.email}</td>
                 <td>{user.role}</td>
                 <td className="text-center">
-                  <Form.Check type="switch" label="" disabled checked={user.is_active} />
+                  {user.is_active && 
+                    <i className="fa fa-check text-success"></i>
+                  }
+                  {!user.is_active && 
+                    <i className="fa fa-times text-danger"></i>
+                  }
                 </td>
                 <td className="text-center">
-                  <Form.Check type="switch" label="" disabled checked={user.verified_email} />
+                  {user.verified_email && 
+                    <i className="fa fa-check text-success"></i>
+                  }
+                  {!user.verified_email && 
+                    <i className="fa fa-times text-danger"></i>
+                  }
                 </td>
                 <td style={{whiteSpace: 'nowrap'}} className="text-center">
                   <Button size="sm" variant="outline-secondary mr-2" onClick={() => this.editUser(user)}>

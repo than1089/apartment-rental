@@ -7,6 +7,7 @@ from django.template.loader import render_to_string
 from rest_auth.registration.views import SocialLoginView
 from rest_framework import exceptions, status, viewsets
 from rest_framework.decorators import action, api_view
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import User
@@ -15,7 +16,7 @@ from .serializers import InviteUserSerializer, UserSerializer
 
 
 class UserView(viewsets.ModelViewSet):
-    permission_classes = (UserPermission,)
+    permission_classes = (IsAuthenticated, UserPermission,)
     serializer_class = UserSerializer
     queryset = User.objects.all()
 

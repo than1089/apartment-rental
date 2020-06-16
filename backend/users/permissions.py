@@ -9,10 +9,17 @@ class UserPermission(permissions.BasePermission):
 
     def has_permission(self, request, view):
         if view.action in ['list', 'create', 'destroy', 'invite']:
-            return request.user and request.user.is_authenticated \
-                and request.user.role == User.ADMIN
+            return request.user.role == User.ADMIN
+        return True
+
+    def has_object_permission(self, request, view, obj):
+        if request.user.role == User.ADMIN:
+            return True
 
         if view.action in ['retrieve', 'update', 'partial_update']:
-            return request.user and request.user.is_authenticated
+            return request.user.id == obj.id
+        
+        if view.action == 'destroy':
+            return request.user.id != obj.id
 
         return False

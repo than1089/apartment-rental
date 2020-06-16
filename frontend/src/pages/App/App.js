@@ -25,28 +25,35 @@ class App extends React.Component {
 
   render() {
     const { alert, authentication } = this.props;
+    const user = this.props.authentication.user;
+    let displayName = '';
+    if (user) {
+      displayName = user.first_name ? user.first_name + ' ' + user.last_name : user.email;
+    }
     return (
       <Router history={history}>
         <div className="wrapper">
-          {authentication.user && !authentication.loggingIn &&
+          {user && !authentication.loggingIn &&
             <Navbar bg="dark" variant="dark" expand="lg" className="mb-4">
-              <Navbar.Brand>Apartment Rentals</Navbar.Brand>
+              <Navbar.Brand>
+                <Link to="/" className="nav-link" role="button">Apartment Rentals</Link>
+              </Navbar.Brand>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
                   <Link to="/" className="nav-link" role="button">List View</Link>
                   <Link to="/map" className="nav-link" role="button">Map View</Link>
-                  {authentication.user.role === 'Admin' &&
+                  {user.role === 'Admin' &&
                     <Link to="/user-management" className="nav-link" role="button">User Management</Link>
                   }
-                  {['Admin', 'Realtor'].indexOf(authentication.user.role) !== -1 &&
+                  {['Admin', 'Realtor'].indexOf(user.role) !== -1 &&
                     <Link to="/apartment-management" className="nav-link" role="button">Apartment Management</Link>
                   }
                 </Nav>
               </Navbar.Collapse>
               <Navbar.Collapse className="justify-content-end">
                 <Navbar.Text>
-                  Signed in as: <strong>{authentication.user.first_name}</strong>
+                Signed in as: <strong>{displayName}</strong>
                 </Navbar.Text>
                 <Link to="/login" className="nav-link" role="button"><i className="fa fa-sign-out" aria-hidden="true"></i></Link>
               </Navbar.Collapse>

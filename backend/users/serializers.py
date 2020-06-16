@@ -3,8 +3,8 @@ from .models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    first_name = serializers.CharField(required=False)
-    last_name = serializers.CharField(required=False)
+    first_name = serializers.CharField(allow_blank=True, required=False)
+    last_name = serializers.CharField(allow_blank=True, required=False)
     email = serializers.CharField(required=True)
     password = serializers.CharField(max_length=128, required=True, write_only=True)
     role = serializers.CharField(required=False)
@@ -33,8 +33,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class RegisterSerializer(serializers.Serializer):
-    first_name = serializers.CharField(default='')
-    last_name = serializers.CharField(default='')
+    first_name = serializers.CharField(allow_blank=True, required=False)
+    last_name = serializers.CharField(allow_blank=True, required=False)
     email = serializers.EmailField(required=True)
     password = serializers.CharField(max_length=128, min_length=6, required=True, write_only=True)
     role = serializers.CharField(default=User.CLIENT)

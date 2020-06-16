@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.gis.db.models import PointField
+from django.contrib.gis.geos import Point
 
 
 class Apartment(models.Model):
@@ -18,6 +20,7 @@ class Apartment(models.Model):
     address = models.CharField(max_length=255)
     lat = models.DecimalField(max_digits=9, decimal_places=6, help_text="Location Latitude")
     lng = models.DecimalField(max_digits=9, decimal_places=6, help_text="Location Longitude")
+    location = PointField(null=True, srid=4326, geography=False)
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
