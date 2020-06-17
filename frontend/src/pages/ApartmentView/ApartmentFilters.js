@@ -14,11 +14,7 @@ const initState = {
 class ApartmentFilters extends React.Component {
   constructor(props) {
     super(props);
-    if (props.filters) {
-      this.state = props.filters;
-    } else {
-      this.state = initState;
-    }
+    this.state = initState;
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
