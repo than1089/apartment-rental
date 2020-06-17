@@ -1,7 +1,7 @@
 import React from 'react';
 import { Router, Route, Switch, Redirect, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Navbar, Nav } from 'react-bootstrap'
+import { Navbar, Nav, NavDropdown, NavItem } from 'react-bootstrap'
 import { history } from '../../helpers';
 import { alertActions } from '../../redux/actions';
 import { PrivateRoute } from '../../components';
@@ -9,8 +9,10 @@ import { ApartmentListView, ApartmentMapView } from '../ApartmentView';
 import { ApartmentManagement } from '../ApartmentManagement';
 import { UserManagement } from '../UserManagement';
 import { VerifyEmail } from '../VerifyEmail';
+import { UploadAvatar } from '../UserProfile';
 import { Login } from '../Login';
 import { Register } from '../Register';
+import './App.css';
 
 
 class App extends React.Component {
@@ -52,10 +54,20 @@ class App extends React.Component {
                 </Nav>
               </Navbar.Collapse>
               <Navbar.Collapse className="justify-content-end">
-                <Navbar.Text>
-                Signed in as: <strong>{displayName}</strong>
-                </Navbar.Text>
-                <Link to="/login" className="nav-link" role="button"><i className="fa fa-sign-out" aria-hidden="true"></i></Link>
+                <NavDropdown title={displayName}>
+                  <Link to="/profile" className="nav-link" role="button">Change Avatar</Link>
+                  <Link to="/login" className="nav-link" role="button"><i className="fa fa-sign-out mr-1" aria-hidden="true"></i>Logout</Link>
+                </NavDropdown>
+                {user.profile_img &&
+                  <NavItem>
+                    <img src={user.profile_img} width="30" height="30" className="profile-image" alt="Avatar"/>
+                  </NavItem>
+                }
+                {!user.profile_img &&
+                  <NavItem>
+                    <img src="/avatar.jpg" width="30" height="30" className="profile-image" alt="Avatar"/>
+                  </NavItem>
+                }
               </Navbar.Collapse>
             </Navbar>
           }
@@ -64,7 +76,7 @@ class App extends React.Component {
               {alert.message &&
                 <div className={`alert ${alert.type}`}>
                   {alert.message}
-                  <button type="button" class="close"
+                  <button type="button" className="close"
                     data-dismiss="alert" aria-label="Close"
                     onClick={this.props.clearAlerts}>
                     <span aria-hidden="true">&times;</span>
@@ -76,6 +88,7 @@ class App extends React.Component {
                   <PrivateRoute exact path="/map" component={ApartmentMapView} />
                   <PrivateRoute exact path="/user-management" component={UserManagement} />
                   <PrivateRoute exact path="/apartment-management" component={ApartmentManagement} />
+                  <PrivateRoute exact path="/profile" component={UploadAvatar} />
                   <Route path="/login" component={Login} />
                   <Route path="/register" component={Register} />
                   <Route path="/verify-email/" component={VerifyEmail} />

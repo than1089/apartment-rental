@@ -1,5 +1,9 @@
-from django.conf import settings
+from io import BytesIO
+
+import requests
+from allauth.account.signals import user_signed_up
 from django.contrib.auth.signals import user_logged_in, user_login_failed
+from django.core.files import File
 from django.dispatch import receiver
 from rest_framework import exceptions
 
@@ -28,3 +32,17 @@ def user_logged_in_callback(sender, request, user, **kwargs):
     if user.login_attempts > 0:
         user.login_attempts = 0
         user.save()
+
+@receiver(user_signed_up)
+def social_signed_up_callback(request, user, **kwargs):
+    sociallogin = kwargs.get('sociallogin')
+    if hasattr(sociallogin, 'account'):
+        if hasattr(sociallogin.account, 'get_avatar_url'):
+            image_url = sociallogin.account.get_avatar_url()
+            resp = requests.get(image_url)
+            fp = BytesIO()
+            fp.write(resp.content)
+            user.profile_img.save(
+                "{}.jpeg".format(user.username),
+                File(fp)
+            )

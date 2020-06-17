@@ -11,6 +11,7 @@ export const userService = {
     verifyEmail,
     loginSocial,
     invite,
+    uploadAvatar,
 };
 
 async function login(email, password) {
@@ -127,4 +128,16 @@ async function invite(email) {
 
     const response = await fetch(`/api/users/invite/`, requestOptions);
     return await handleResponse(response)
+}
+
+async function uploadAvatar(userId, files) {
+    const formData = new FormData();
+    formData.append('profile_img', files[0], files[0].name);
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader()},
+        body: formData
+    };
+    const response = await fetch(`/api/users/${userId}/upload_avatar/`, requestOptions);
+    return await handleResponse(response);
 }

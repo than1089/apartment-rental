@@ -14,6 +14,7 @@ export const userActions = {
   verifyEmail,
   loginSocial,
   invite,
+  uploadAvatar,
 };
 
 const usersPath = '/api/users/';
@@ -213,5 +214,34 @@ function invite(email) {
   function request() { return { type: userConstants.INVITE_USER_REQUEST } }
   function success() { return { type: userConstants.INVITE_USER_SUCCESS } }
   function failure(error) { return { type: userConstants.INVITE_USER_FAILURE, error } }
+}
+
+function uploadAvatar(userId, files) {
+  return dispatch => {
+    dispatch(request());
+
+    userService.uploadAvatar(userId, files)
+      .then(
+        (response) => {
+          dispatch(success(response.profile_img));
+          dispatch(alertActions.success("Uploaded successfully!"));
+          updateToLocalStorage(response.profile_img);
+        },
+        error => {
+          dispatch(failure());
+          dispatch(alertActions.error(error));
+        }
+      );
+  };
+
+  function updateToLocalStorage(profile_img) {
+    const auth = JSON.parse(localStorage.getItem('auth'));
+    auth.user.profile_img = process.env.REACT_APP_BACKEND_HOST + profile_img;
+    localStorage.setItem('auth', JSON.stringify(auth));
+  }
+
+  function request() { return { type: userConstants.UPLOAD_AVATAR_REQUEST } }
+  function success(profile_img) { return { type: userConstants.UPLOAD_AVATAR_SUCCESS, profile_img } }
+  function failure() { return { type: userConstants.UPLOAD_AVATAR_FAILURE } }
 }
 

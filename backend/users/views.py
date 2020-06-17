@@ -9,10 +9,11 @@ from rest_framework import exceptions, status, viewsets
 from rest_framework.decorators import action, api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.parsers import FileUploadParser
 
 from .models import User
 from .permissions import UserPermission
-from .serializers import InviteUserSerializer, UserSerializer
+from .serializers import InviteUserSerializer, UserSerializer, ProfileImageSerializer
 
 
 class UserView(viewsets.ModelViewSet):
@@ -21,7 +22,7 @@ class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
 
     @action(detail=False, methods=['post'])
-    def invite(self, request, pk=None):
+    def invite(self, request):
         """
         Invite a new user by sending email to them
         """
@@ -41,9 +42,23 @@ class UserView(viewsets.ModelViewSet):
             return Response({'detail': 'Email sent.'}, status=status.HTTP_200_OK)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=True, methods=['post'])
+    def upload_avatar(self, request, pk=None):
+        user = User.objects.get(pk=pk)
+        file_serializer = ProfileImageSerializer(data=request.data)
+
+        if file_serializer.is_valid():
+            user.profile_img = file_serializer.validated_data['profile_img']
+            user.save()
+            return Response({'profile_img': user.profile_img.url}, status=status.HTTP_200_OK)
+        else:
+            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
     def get_queryset(self):
         return User.objects.filter(is_superuser=False).all()
+
     
 @api_view()
 def null_view(request):

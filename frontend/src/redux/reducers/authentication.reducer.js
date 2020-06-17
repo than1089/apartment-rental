@@ -1,6 +1,6 @@
 import { userConstants } from '../actionTypes';
 
-let auth = JSON.parse(localStorage.getItem('auth'));
+const auth = JSON.parse(localStorage.getItem('auth'));
 const initialState = auth ? { loggedIn: true, user: auth.user } : {};
 
 export function authentication(state = initialState, action) {
@@ -15,10 +15,6 @@ export function authentication(state = initialState, action) {
         loggedIn: true,
         user: action.user
       };
-    case userConstants.LOGIN_FAILURE:
-      return {};
-    case userConstants.LOGOUT:
-      return {};
     case userConstants.VERIFY_EMAIL_REQUEST:
       return {
         ...state,
@@ -42,6 +38,25 @@ export function authentication(state = initialState, action) {
         loggedIn: true,
         user: action.user
       }
+    case userConstants.UPLOAD_AVATAR_REQUEST:
+      return {
+        ...state,
+        uploadingAvatar: true
+      }
+    case userConstants.UPLOAD_AVATAR_SUCCESS:
+      const user = Object.assign({}, state.user);
+      user.profile_img = process.env.REACT_APP_BACKEND_HOST + action.profile_img;
+      return {
+        user
+      }
+    case userConstants.UPLOAD_AVATAR_FAILURE:
+      return {
+        ...state,
+        uploadingAvatar: false
+      }
+    
+    case userConstants.LOGIN_FAILURE:
+    case userConstants.LOGOUT:
     case userConstants.LOGIN_SOCIAL_FAILURE:
       return {}
     default:

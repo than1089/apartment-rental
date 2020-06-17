@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Table, Button, Form } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
 import { userActions } from '../../redux/actions';
 import { UserModal } from './UserModal';
 import { InviteUserModal } from './InviteUserModal';

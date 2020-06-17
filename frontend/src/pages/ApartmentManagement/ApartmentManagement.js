@@ -17,7 +17,7 @@ class ApartmentManagement extends React.Component {
     this.editApartment = this.editApartment.bind(this);
   }
   componentDidMount() {
-    const user = this.props.auth.user;
+    const { user } = this.props;
     if (user.role === 'Realtor') {
       this.props.setBasePath(`/api/apartments/?realtor=${user.id}`);
     } else {
@@ -51,9 +51,9 @@ class ApartmentManagement extends React.Component {
   }
 
   render() {
-    const { apartments, auth } = this.props;
+    const { apartments, user } = this.props;
     const { modalShow, editingApartment } = this.state;
-    const currentRole = auth.user.role;
+    const currentRole = user.role;
     return (
       <div>
         <h2 className="mb-4">Apartment Management</h2>
@@ -114,7 +114,7 @@ class ApartmentManagement extends React.Component {
             }
             {!apartments.results.length && 
               <tr>
-                <td colSpan={auth.user.role === 'Admin' ? 9 : 8} className="text-center">
+                <td colSpan={user.role === 'Admin' ? 9 : 8} className="text-center">
                   Opps! You have no apartments yet.
                 </td> 
               </tr>
@@ -135,7 +135,7 @@ class ApartmentManagement extends React.Component {
 function mapState(state) {
   return {
     apartments: state.apartments,
-    auth: state.authentication,
+    user: state.authentication.user,
   };
 }
 

@@ -14,14 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf.urls import include, url
+from django.conf.urls.static import static
 from django.contrib import admin
-from rest_framework import status
-from rest_framework.response import Response
+from django.conf import settings
 from rest_framework.routers import SimpleRouter
 
 from apartments.views import ApartmentView
-from users.views import FacebookLogin, GoogleLogin, UserView, null_view
 from users.social_views import FacebookConnect, TwitterConnect
+from users.views import FacebookLogin, GoogleLogin, UserView, null_view
 
 router = SimpleRouter()
 router.register(r'apartments', ApartmentView)
@@ -39,4 +39,4 @@ urlpatterns = [
     url(r'^rest-auth/facebook/connect/$', FacebookConnect.as_view(), name='fb_connect'),
     url(r'^rest-auth/twitter/connect/$', TwitterConnect.as_view(), name='twitter_connect'),
     url(r'^accounts/', include('allauth.urls'), name='socialaccount_signup'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

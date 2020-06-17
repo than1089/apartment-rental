@@ -15,7 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'first_name', 'last_name', 'email', 'password',
-            'role', 'is_active', 'login_attempts', 'verified_email']
+            'role', 'is_active', 'login_attempts', 'verified_email', 'profile_img']
 
     def update(self, instance, validated_data):
         for field in ['first_name', 'last_name', 'email', 'role', 'is_active']:
@@ -77,3 +77,7 @@ class RegisterSerializer(serializers.Serializer):
 
 class InviteUserSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
+
+
+class ProfileImageSerializer(serializers.Serializer):
+    profile_img = serializers.ImageField()

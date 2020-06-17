@@ -84,7 +84,7 @@ class ApartmentMapView extends React.Component {
 
     searchBox.addListener('places_changed', () => {
       const places = searchBox.getPlaces();
-      if (places.length == 0) {
+      if (!places.length) {
         return;
       }
       this.map.setCenter(places[0].geometry.location);
@@ -153,8 +153,7 @@ class ApartmentMapView extends React.Component {
 
 function mapState(state) {
   return {
-    apartments: state.apartments,
-    auth: state.authentication,
+    apartments: state.apartments
   };
 }
 

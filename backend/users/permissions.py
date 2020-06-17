@@ -16,7 +16,7 @@ class UserPermission(permissions.BasePermission):
         if request.user.role == User.ADMIN:
             return True
 
-        if view.action in ['retrieve', 'update', 'partial_update']:
+        if view.action in ['retrieve', 'update', 'partial_update', 'upload_avatar']:
             return request.user.id == obj.id
         
         if view.action == 'destroy':

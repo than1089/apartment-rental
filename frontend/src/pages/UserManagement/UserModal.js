@@ -17,6 +17,11 @@ const initState = {
   addingUser: true,
 };
 
+const getUserDataForModal = (user) => {
+  const { id, first_name, last_name, email, username, password, is_active } = user;
+  return { id, first_name, last_name, email, username, password, is_active };
+}
+
 class UserModal extends React.Component {
   constructor(props) {
     super(props);
@@ -32,7 +37,7 @@ class UserModal extends React.Component {
     const user = props.user;
     if (user && user.id !== state.user.id) {
       return {
-        user,
+        user: getUserDataForModal(user),
         submitted: false,
         addingUser: false,
       }

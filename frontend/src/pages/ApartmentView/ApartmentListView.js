@@ -65,8 +65,7 @@ class ApartmentListView extends React.Component {
 
 function mapState(state) {
   return {
-    apartments: state.apartments,
-    auth: state.authentication,
+    apartments: state.apartments
   };
 }
 
