@@ -30,7 +30,9 @@ class UploadAvatar extends React.Component {
         submitted: true
     });
     const { user } = this.props.auth;
-    this.props.uploadAvatar(user.id, this.state.files);
+    if (this.state.files.length) {
+      this.props.uploadAvatar(user.id, this.state.files);
+    }
   }
 
   render() {
@@ -48,11 +50,11 @@ class UploadAvatar extends React.Component {
                 onChange={this.handleChange}
                 name="profile_img"
                 accept="image/png, image/jpeg"
-                isInvalid={submitted && !files}
+                isInvalid={submitted && !files.length}
               >
               </Form.Control>
-              {submitted && !files &&
-                <Form.Control.Feedback type="invalid">Please select one image.</Form.Control.Feedback>
+              {submitted && !files.length &&
+                <Form.Control.Feedback type="invalid">Please choose one image.</Form.Control.Feedback>
               }
             </Form.Group>
             <Form.Group>

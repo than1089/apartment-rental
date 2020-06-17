@@ -27,6 +27,7 @@ class ApartmentMapView extends React.Component {
 
   componentWillUnmount() {
     this.props.setBasePath(`/api/apartments/`);
+    this.leaving = true;
   }
 
   renderMarkers() {
@@ -104,6 +105,9 @@ class ApartmentMapView extends React.Component {
   }
 
   mapCenterChanged() {
+    if (this.leaving) {
+      return;
+    }
     const center = this.map.getCenter();
 
     if (center.equals(this.center)) {
