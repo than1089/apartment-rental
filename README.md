@@ -35,10 +35,11 @@ This is the Test Project for Toptal Interview
 
 ### Frontend environment variables
 This project some 3rd services: Google Map, Facebook Login, Google Login. The 3rd credentials should be stored in a `.env` inside `frontend` folder. Please create your own `.env` with the following variables
-REACT_APP_FB_APP_ID=YOUR_FACEBOOK_APP_ID
+```REACT_APP_FB_APP_ID=YOUR_FACEBOOK_APP_ID
 REACT_APP_GG_APP_ID=YOUR_GOOGLE_APP_ID
 REACT_APP_GG_MAP_API_KEY=YOUR_GOOGLE_MAP_API_KEY
 REACT_APP_BACKEND_HOST=http://localhost:8000
+```
 
 ### Run tests
 `python manager.py test` to run API tests
