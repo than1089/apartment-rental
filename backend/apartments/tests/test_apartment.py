@@ -131,3 +131,32 @@ class ApartmentTests(APITestCase):
         response = self.client.delete(url, format='json')
         with self.assertRaises(Apartment.DoesNotExist):
             Apartment.objects.get(pk=apartment.id)
+
+    def test_filter_apartments(self):
+        realtor = UserFactory.create_realtor(verified=True)
+        client = UserFactory.create_client(verified=True)
+
+        ApartmentFactory.create_apartment(realtor)
+        ApartmentFactory.create_apartment(realtor)
+
+        self.client.force_authenticate(user=client)
+
+        url = '{}?min_size=70'.format(self.url)
+        response = self.client.get(url, format='json')
+        self.assertEqual(len(response.json().get('results')), 2)
+
+        url = '{}?min_size=90'.format(self.url)
+        response = self.client.get(url, format='json')
+        self.assertEqual(len(response.json().get('results')), 0)
+
+        url = '{}?max_price=300'.format(self.url)
+        response = self.client.get(url, format='json')
+        self.assertEqual(len(response.json().get('results')), 0)
+
+        url = '{}?number_of_rooms=4'.format(self.url)
+        response = self.client.get(url, format='json')
+        self.assertEqual(len(response.json().get('results')), 2)
+
+        url = '{}?number_of_rooms=2'.format(self.url)
+        response = self.client.get(url, format='json')
+        self.assertEqual(len(response.json().get('results')), 0)
