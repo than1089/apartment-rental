@@ -1,6 +1,16 @@
 import { apartmentConstants } from '../actionTypes';
+import { apartmentService } from '../../services';
 
-export function apartments(state = {results: [], base_path: '/api/apartments/'}, action) {
+
+const initState = {
+  list: {results: []},
+  map: {results: []},
+  management: {results: []},
+  filters: null,
+  managementUrl: apartmentService.apartmentUrl
+}
+
+export function apartments(state = initState, action) {
   switch (action.type) {
     case apartmentConstants.FETCH_ALL_REQUEST:
     case apartmentConstants.UPDATE_REQUEST:
@@ -14,7 +24,7 @@ export function apartments(state = {results: [], base_path: '/api/apartments/'},
       return {
         ...state,
         loading: false,
-        ...action.apartments
+        [action.page]: action.apartments
       }
 
     case apartmentConstants.FETCH_ALL_FAILURE:
@@ -26,15 +36,22 @@ export function apartments(state = {results: [], base_path: '/api/apartments/'},
         loading: false,
         error: action.error,
       };
-    case apartmentConstants.FILTER_APARTMENTS:
+    case apartmentConstants.CREATE_SUCCESS:
+    case apartmentConstants.UPDATE_SUCCESS:
+    case apartmentConstants.DELETE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
+    case apartmentConstants.SET_FILTERS:
       return {
         ...state,
         filters: action.filters
       }
-    case apartmentConstants.SET_BASE_PATH:
+    case apartmentConstants.SET_MANAGEMENT_URL:
       return {
         ...state,
-        base_path: action.path
+        managementUrl: action.url
       }
     default:
       return state

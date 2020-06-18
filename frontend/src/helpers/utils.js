@@ -10,7 +10,11 @@ export function buildSearchURL(url, searchObject) {
     for (const key in searchObject) {
         if (searchObject.hasOwnProperty(key)) {
             const value = searchObject[key];
-            searchParams.append(key, value);
+            if (Array.isArray(value)) {
+                value.forEach(item => searchParams.append(key, item));
+            } else {
+                searchParams.append(key, value)
+            }
         }
     }
     return url + '?' + searchParams.toString();

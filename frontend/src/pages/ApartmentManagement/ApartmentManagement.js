@@ -4,6 +4,7 @@ import { Table, Button } from 'react-bootstrap';
 import { ApartmentModal } from '.';
 import { apartmentActions } from '../../redux/actions';
 import { Pagination, UserSelect } from '../../components';
+import { apartmentService } from '../../services';
 
 class ApartmentManagement extends React.Component {
   constructor(props) {
@@ -12,38 +13,37 @@ class ApartmentManagement extends React.Component {
       modalShow: false,
       editingApartment: null,
     };
-
+    this.url = apartmentService.apartmentUrl;
     this.resetModal = this.resetModal.bind(this);
     this.editApartment = this.editApartment.bind(this);
     this.realtorChange = this.realtorChange.bind(this);
   }
+
   componentDidMount() {
     const { user } = this.props;
     if (user.role === 'Realtor') {
-      this.props.setBasePath(`/api/apartments/?realtor=${user.id}`);
-    } else {
-      this.props.setBasePath(`/api/apartments/`);
+      this.url = `${apartmentService.apartmentUrl}?realtor=${user.id}`;
+      this.props.setManagementUrl(this.url);
     }
-    this.props.fetchApartments();
-  }
-
-  componentWillUnmount() {
-    this.props.setBasePath(`/api/apartments/`);
+    this.props.fetchApartments(this.url, 'management');
   }
 
   resetModal() {
     this.setState({
       modalShow: false,
+      editingApartment: null
     });
   }
 
   realtorChange(option) {
     if (option) {
-      this.props.setBasePath(`/api/apartments/?realtor=${option.value}`);
+      this.url = `${apartmentService.apartmentUrl}?realtor=${option.value}`;
+      this.props.setManagementUrl(this.url);
     } else {
-      this.props.setBasePath(`/api/apartments/`);
+      this.url = apartmentService.apartmentUrl;
+      this.props.setManagementUrl(this.url);
     }
-    this.props.fetchApartments();
+    this.props.fetchApartments(this.url, 'management');
   }
 
   editApartment(apartment) {
@@ -74,7 +74,7 @@ class ApartmentManagement extends React.Component {
           </Button>
           {user.role === 'Admin' &&
             <div style={{width: 200}} className="float-right">
-              <UserSelect placeholder="Select a realtor" onChange={this.realtorChange}/>
+              <UserSelect placeholder="Select a user" onChange={this.realtorChange} roles={['Admin', 'Realtor']}/>
             </div>
           }
         </div>
@@ -140,7 +140,7 @@ class ApartmentManagement extends React.Component {
           count={apartments.count}
           next={apartments.next}
           previous={apartments.previous}
-          fetch={this.props.fetchApartments}
+          fetch={url => this.props.fetchApartments(url, 'management')}
         />
       </div>
     );
@@ -149,7 +149,7 @@ class ApartmentManagement extends React.Component {
 
 function mapState(state) {
   return {
-    apartments: state.apartments,
+    apartments: state.apartments.management,
     user: state.authentication.user,
   };
 }
@@ -159,7 +159,7 @@ const actionCreators = {
   createApartment: apartmentActions.create,
   updateApartment: apartmentActions.update,
   deleteApartment: apartmentActions.delete,
-  setBasePath: apartmentActions.setBasePath,
+  setManagementUrl: apartmentActions.setManagementUrl,
 }
 
 const connectedComponent = connect(mapState, actionCreators)(ApartmentManagement);

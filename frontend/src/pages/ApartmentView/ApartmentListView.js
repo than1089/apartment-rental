@@ -4,23 +4,36 @@ import { Badge, Card } from 'react-bootstrap';
 import { apartmentActions } from '../../redux/actions';
 import { ApartmentFilters } from './ApartmentFilters';
 import { Pagination } from '../../components';
+import { buildSearchURL } from '../../helpers/utils';
+import { apartmentService } from '../../services';
 import './ApartmentListView.css';
 
 class ApartmentListView extends React.Component {
+  apartmentUrl = apartmentService.apartmentUrl;
+
+  constructor(props) {
+    super(props);
+    this.fetchData = this.fetchData.bind(this);
+  }
   
   componentDidMount() {
-    this.props.fetchApartments();
+    this.fetchData(this.props.filters);
+  }
+
+  fetchData(filters) {
+    const url = buildSearchURL(apartmentService.apartmentUrl, filters);
+    this.props.fetchApartments(url);
   }
 
   render() {
-    const { apartments } = this.props;
+    const { list } = this.props;
     return (
       <div>
         <h2 className="mb-4">Apartments</h2>
-        <ApartmentFilters/>
+        <ApartmentFilters onChange={this.fetchData}/>
         <hr/>
         <div className="row">
-          {apartments.results.map((item, index) => 
+          {list.results.map((item, index) => 
             <div className="col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-4 d-flex" key={index}>
               <Card>
                 <Card.Body className="d-flex flex-column">
@@ -46,16 +59,16 @@ class ApartmentListView extends React.Component {
               </Card>
             </div>
           )}
-          {!apartments.results.length &&
+          {!list.results.length &&
             <div className="col text-center">
               <h3><i className="far fa-sad-cry" aria-hidden="true"></i> No results found!</h3>
             </div>
           }
         </div>
         <Pagination
-          count={apartments.count}
-          next={apartments.next}
-          previous={apartments.previous}
+          count={list.count}
+          next={list.next}
+          previous={list.previous}
           fetch={this.props.fetchApartments}
         />
       </div>
@@ -65,7 +78,8 @@ class ApartmentListView extends React.Component {
 
 function mapState(state) {
   return {
-    apartments: state.apartments
+    list: state.apartments.list,
+    filters: state.apartments.filters
   };
 }
 

@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { apartmentActions } from '../../redux/actions';
 import { ApartmentFilters } from './ApartmentFilters';
 import { GoogleApiWrapper } from 'google-maps-react';
+import { buildSearchURL } from '../../helpers/utils';
+import { apartmentService } from '../../services';
 
 
 const mapContainerStyle = {
@@ -16,6 +18,14 @@ class ApartmentMapView extends React.Component {
   infoWindow = null;
   markers = [];
 
+  constructor(props) {
+    super(props);
+    this.onFilterChange = this.onFilterChange.bind(this);
+    this.state = {
+      filters: this.props.filters
+    }
+  }
+
   componentDidMount() {
     this.initMap();
   }
@@ -23,10 +33,6 @@ class ApartmentMapView extends React.Component {
   componentDidUpdate() {
     this.clearMarkers();
     this.renderMarkers();
-  }
-
-  componentWillUnmount() {
-    this.props.setBasePath(`/api/apartments/`);
   }
 
   renderMarkers() {
@@ -112,8 +118,32 @@ class ApartmentMapView extends React.Component {
     this.center = center;
 
     this.circle.setCenter(center);
-    this.props.setBasePath(`/api/apartments/?limit=100&lat=${center.lat()}&lng=${center.lng()}`);
-    this.props.fetchApartments();
+
+    this.setState({
+      filters: {
+        ...this.state.filters,
+        lat: center.lat(),
+        lng: center.lng(),
+        limit: 100
+      }
+    })
+
+    this.fetchData();
+  }
+
+  fetchData() {
+    const url = buildSearchURL(apartmentService.apartmentUrl, this.state.filters);
+    this.props.fetchApartments(url, 'map');
+  }
+
+  onFilterChange(filters) {
+    this.setState({
+      filters: {
+        ...this.state.filters,
+        ...filters
+      }
+    })
+    this.fetchData();
   }
 
   getApartmentPoint(apartment) {
@@ -140,7 +170,7 @@ class ApartmentMapView extends React.Component {
     return (
       <div className="mb-4">
         <h2 className="mb-4">Apartment Map</h2>
-        <ApartmentFilters />
+        <ApartmentFilters onChange={this.onFilterChange} />
         <hr />
         <input id="pac-input" className="controls" type="text" placeholder="Search Box" style={{padding: '3px 5px'}} />
         <div className="row">
@@ -153,13 +183,13 @@ class ApartmentMapView extends React.Component {
 
 function mapState(state) {
   return {
-    apartments: state.apartments
+    apartments: state.apartments.map,
+    filters: state.apartments.filters
   };
 }
 
 const actionCreators = {
   fetchApartments: apartmentActions.fetchAll,
-  setBasePath: apartmentActions.setBasePath,
 };
 
 const WrapperedMap = GoogleApiWrapper({

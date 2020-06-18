@@ -5,6 +5,7 @@ export const apartmentService = {
     create,
     update,
     delete: _delete,
+    apartmentUrl: '/api/apartments/'
 };
 
 async function fetchAll(url=null) {

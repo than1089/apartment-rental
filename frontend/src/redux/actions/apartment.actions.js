@@ -1,40 +1,36 @@
 import { apartmentConstants } from '../actionTypes';
 import { apartmentService } from '../../services';
 import { alertActions } from '.';
-import { buildSearchURL } from '../../helpers/utils';
 import { store } from '../../helpers/store';
 
 
 export const apartmentActions = {
-  setBasePath,
   fetchAll,
   create,
   update,
   delete: _delete,
-  filterApartments,
+  setFilters,
+  setManagementUrl,
 };
 
-function setBasePath(path){
+function setManagementUrl(url) {
   return {
-    type: apartmentConstants.SET_BASE_PATH,
-    path
+    type: apartmentConstants.SET_MANAGEMENT_URL,
+    url
   }
 }
 
-function getBasePath() {
-  return store.getState().apartments.base_path;
+function getManagementUrl() {
+  return store.getState().apartments.managementUrl;
 }
 
-function fetchAll(url=null) {
+function fetchAll(url=null, page='list') {
   return dispatch => {
     dispatch(request());
-    if (!url) {
-      url = getBasePath();
-    }
     apartmentService.fetchAll(url)
       .then(
         apartments => {
-          dispatch(success(apartments));
+          dispatch(success(apartments, page));
         },
         error => {
           dispatch(failure(error));
@@ -44,7 +40,7 @@ function fetchAll(url=null) {
   };
 
   function request() { return { type: apartmentConstants.FETCH_ALL_REQUEST } }
-  function success(apartments) { return { type: apartmentConstants.FETCH_ALL_SUCCESS, apartments } }
+  function success(apartments) { return { type: apartmentConstants.FETCH_ALL_SUCCESS, apartments, page } }
   function failure(error) { return { type: apartmentConstants.FETCH_ALL_FAILURE, error } }
 }
 
@@ -57,7 +53,7 @@ function create(apartment) {
         apartment => {
           dispatch(success(apartment));
           dispatch(alertActions.success('Created successfully!'));
-          dispatch(fetchAll());
+          dispatch(fetchAll(getManagementUrl(), 'management'));
         },
         error => {
           dispatch(failure(error));
@@ -80,7 +76,7 @@ function update(apartment) {
         apartment => {
           dispatch(success(apartment));
           dispatch(alertActions.success('Updated successfully!'));
-          dispatch(fetchAll());
+          dispatch(fetchAll(getManagementUrl(), 'management'));
         },
         error => {
           dispatch(failure(error));
@@ -103,7 +99,7 @@ function _delete(apartment) {
         () => {
           dispatch(success(apartment));
           dispatch(alertActions.success('Deleted successfully!'));
-          dispatch(fetchAll());
+          dispatch(fetchAll(getManagementUrl(), 'management'));
         },
         error => {
           dispatch(failure(error));
@@ -117,11 +113,4 @@ function _delete(apartment) {
   function failure(error) { return { type: apartmentConstants.DELETE_FAILURE, error } }
 }
 
-function filterApartments(filters) {
-  return dispatch => {
-    dispatch(setFilters(filters));
-    const url = buildSearchURL(getBasePath(), filters);
-    dispatch(fetchAll(url));
-  }
-  function setFilters(filters) { return { type: apartmentConstants.FILTER_APARTMENTS, filters } }
-}
+function setFilters(filters) { return { type: apartmentConstants.SET_FILTERS, filters } }

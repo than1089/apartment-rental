@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Button, Form } from 'react-bootstrap';
 import { apartmentActions } from '../../redux/actions';
 
+
 const initState = {
   min_size: "",
   max_size: "",
@@ -14,9 +15,16 @@ const initState = {
 class ApartmentFilters extends React.Component {
   constructor(props) {
     super(props);
-    this.state = initState;
+    if (this.props.filters) {
+      this.state = this.props.filters;
+    } else {
+      this.state = initState;
+    }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  static defaultProps = {
+    onChange: () => {}       
   }
   handleChange(e) {
     const { name, value } = e.target;
@@ -24,7 +32,8 @@ class ApartmentFilters extends React.Component {
   }
   handleSubmit(e) {
     e.preventDefault();
-    this.props.filterApartments(this.state);
+    this.props.setFilters(this.state);
+    this.props.onChange(this.state);
   }
 
   render() {
@@ -164,12 +173,11 @@ class ApartmentFilters extends React.Component {
 }
 
 function mapState(state) {
-  const { filters } = state.apartments;
-  return { filters };
+  return { filters: state.apartments.filters };
 }
 
 const actionCreators = {
-  filterApartments: apartmentActions.filterApartments,
+  setFilters: apartmentActions.setFilters,
 }
 
 const connectedComponent = connect(mapState, actionCreators)(ApartmentFilters);

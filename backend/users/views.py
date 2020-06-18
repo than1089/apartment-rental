@@ -61,12 +61,15 @@ class UserView(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = User.objects.filter(is_superuser=False).all()
         q = self.request.query_params.get('q', None)
+        roles = self.request.query_params.getlist('roles', None)
         if q:
             queryset = queryset.filter(
                 Q(first_name__icontains=q) |
                 Q(last_name__icontains=q) |
                 Q(email__icontains=q)
             )
+        if roles:
+            queryset = queryset.filter(role__in=roles)
 
         return queryset
 
