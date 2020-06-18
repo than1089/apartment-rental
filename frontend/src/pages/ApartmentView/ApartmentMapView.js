@@ -9,8 +9,7 @@ import { apartmentService } from '../../services';
 
 const mapContainerStyle = {
   height: '400px',
-  width: '768px',
-  margin: 'auto'
+  width: '100%',
 };
 
 class ApartmentMapView extends React.Component {
@@ -21,9 +20,7 @@ class ApartmentMapView extends React.Component {
   constructor(props) {
     super(props);
     this.onFilterChange = this.onFilterChange.bind(this);
-    this.state = {
-      filters: this.props.filters
-    }
+    this.filters = this.props.filters;
   }
 
   componentDidMount() {
@@ -119,30 +116,26 @@ class ApartmentMapView extends React.Component {
 
     this.circle.setCenter(center);
 
-    this.setState({
-      filters: {
-        ...this.state.filters,
-        lat: center.lat(),
-        lng: center.lng(),
-        limit: 100
-      }
-    })
+    this.filters = {
+      ...this.filters,
+      lat: center.lat(),
+      lng: center.lng(),
+      limit: 100
+    }
 
     this.fetchData();
   }
 
   fetchData() {
-    const url = buildSearchURL(apartmentService.apartmentUrl, this.state.filters);
+    const url = buildSearchURL(apartmentService.apartmentUrl, this.filters);
     this.props.fetchApartments(url, 'map');
   }
 
   onFilterChange(filters) {
-    this.setState({
-      filters: {
-        ...this.state.filters,
-        ...filters
-      }
-    })
+    this.filters = {
+      ...this.filters,
+      ...filters
+    }
     this.fetchData();
   }
 
