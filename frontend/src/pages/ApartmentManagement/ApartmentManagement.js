@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Table, Button } from 'react-bootstrap';
 import { ApartmentModal } from '.';
 import { apartmentActions } from '../../redux/actions';
-import { Pagination } from '../../components';
+import { Pagination, UserSelect } from '../../components';
 
 class ApartmentManagement extends React.Component {
   constructor(props) {
@@ -15,6 +15,7 @@ class ApartmentManagement extends React.Component {
 
     this.resetModal = this.resetModal.bind(this);
     this.editApartment = this.editApartment.bind(this);
+    this.realtorChange = this.realtorChange.bind(this);
   }
   componentDidMount() {
     const { user } = this.props;
@@ -34,6 +35,15 @@ class ApartmentManagement extends React.Component {
     this.setState({
       modalShow: false,
     });
+  }
+
+  realtorChange(option) {
+    if (option) {
+      this.props.setBasePath(`/api/apartments/?realtor=${option.value}`);
+    } else {
+      this.props.setBasePath(`/api/apartments/`);
+    }
+    this.props.fetchApartments();
   }
 
   editApartment(apartment) {
@@ -62,6 +72,11 @@ class ApartmentManagement extends React.Component {
             onClick={() => this.setState({modalShow: true, editingApartment: null})}>
               Add Apartment <i className="fas fa-plus"></i>
           </Button>
+          {user.role === 'Admin' &&
+            <div style={{width: 200}} className="float-right">
+              <UserSelect placeholder="Select a realtor" onChange={this.realtorChange}/>
+            </div>
+          }
         </div>
         <ApartmentModal
           show={modalShow}
@@ -79,7 +94,7 @@ class ApartmentManagement extends React.Component {
               <th className="text-center">Rooms</th>
               <th>Size (m2)</th>
               {currentRole === 'Admin' &&
-              <th width="12%">Realtor</th>
+              <th width="12%">Owner</th>
               }
               <th width="15%">Address</th>
               <th className="text-center">Status</th>
@@ -115,7 +130,7 @@ class ApartmentManagement extends React.Component {
             {!apartments.results.length && 
               <tr>
                 <td colSpan={user.role === 'Admin' ? 9 : 8} className="text-center">
-                  Opps! You have no apartments yet.
+                  No reuslts!
                 </td> 
               </tr>
             }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Table, Button } from 'react-bootstrap';
+import { Table, Button, Form } from 'react-bootstrap';
 import { userActions } from '../../redux/actions';
 import { UserModal } from './UserModal';
 import { InviteUserModal } from './InviteUserModal';
@@ -13,10 +13,12 @@ class UserManagement extends React.Component {
       userModalShow: false,
       inviteModalShow: false,
       editingUser: null,
+      search: ''
     };
 
     this.resetModal = this.resetModal.bind(this);
     this.editUser = this.editUser.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
   componentDidMount() {
     this.props.fetchUsers();
@@ -43,6 +45,12 @@ class UserManagement extends React.Component {
     }
   }
 
+  handleSearch(e) {
+    e.preventDefault();
+    const q =  document.getElementById('search').value;
+    this.props.fetchUsers(`/api/users/?q=${encodeURIComponent(q)}`);
+  }
+
   render() {
     const { users, authentication } = this.props;
     const { userModalShow, inviteModalShow, editingUser } = this.state;
@@ -58,6 +66,14 @@ class UserManagement extends React.Component {
             onClick={() => this.setState({ inviteModalShow: true })}>
             Invite New User <i className="fas fa-envelop"></i>
           </Button>
+          <div className="float-right">
+            <Form onSubmit={this.handleSearch}>
+              <div className="d-flex">
+                <input type="text" placeholder="Search Users" id="search" className="mr-2 form-control form-control-sm"></input>
+                <Button variant="primary" size="sm" type="submit">Search</Button>
+              </div>
+            </Form>
+          </div>
         </div>
         <UserModal
           show={userModalShow}
@@ -116,6 +132,11 @@ class UserManagement extends React.Component {
                 </td>
               </tr>
             )
+            }
+            {!users.results.length &&
+              <tr>
+                <td className="text-center" colSpan="7">No results.</td>
+              </tr>
             }
           </tbody>
         </Table>

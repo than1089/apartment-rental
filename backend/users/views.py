@@ -3,17 +3,19 @@ from allauth.socialaccount.providers.facebook.views import \
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from django.conf import settings
 from django.core.mail import send_mail
+from django.db.models import Q
 from django.template.loader import render_to_string
 from rest_auth.registration.views import SocialLoginView
 from rest_framework import exceptions, status, viewsets
 from rest_framework.decorators import action, api_view
+from rest_framework.parsers import FileUploadParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.parsers import FileUploadParser
 
 from .models import User
 from .permissions import UserPermission
-from .serializers import InviteUserSerializer, UserSerializer, ProfileImageSerializer
+from .serializers import (InviteUserSerializer, ProfileImageSerializer,
+                          UserSerializer)
 
 
 class UserView(viewsets.ModelViewSet):
@@ -57,7 +59,16 @@ class UserView(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
-        return User.objects.filter(is_superuser=False).all()
+        queryset = User.objects.filter(is_superuser=False).all()
+        q = self.request.query_params.get('q', None)
+        if q:
+            queryset = queryset.filter(
+                Q(first_name__icontains=q) |
+                Q(last_name__icontains=q) |
+                Q(email__icontains=q)
+            )
+
+        return queryset
 
     
 @api_view()
