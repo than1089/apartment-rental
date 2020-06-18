@@ -18,5 +18,6 @@ class ApartmentSerializer(serializers.ModelSerializer):
         return '{} {}'.format(obj.realtor.first_name, obj.realtor.last_name)
 
     def to_internal_value(self, data):
-        data['location'] = Point(float(data.get('lng')), float(data.get('lat')), srid=4326)
+        if ('lng' in data and 'lat' in data):
+            data['location'] = Point(float(data.get('lng')), float(data.get('lat')), srid=4326)
         return data

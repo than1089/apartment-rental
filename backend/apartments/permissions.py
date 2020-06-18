@@ -9,15 +9,15 @@ class ApartmentPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         # Write permission is only allowed by Admin and Realtor,
         # additional check will perform in has_object_permission method
-        if view.action in ['create', 'update', 'parpartial_update', 'destroy']:
+        if view.action in ['create', 'update', 'partial_update', 'destroy']:
             return request.user.role in [User.ADMIN, User.REALTOR]
         return True
 
     def has_object_permission(self, request, view, obj):
-        if request.user.role == 'Admin':
+        if request.user.role == User.ADMIN:
             return True
         
-        if view.action in ['update', 'parpartial_update', 'destroy']:
-            return obj.realtor.id == request.user.id
+        if view.action in ['update', 'partial_update', 'destroy']:
+            return request.user.role == User.REALTOR and obj.realtor.id == request.user.id
 
         return True

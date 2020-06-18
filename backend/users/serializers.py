@@ -46,16 +46,16 @@ class RegisterSerializer(serializers.Serializer):
         return email
 
     def validate_role(self, role):
-        if role != User.ADMIN:
-            return role
-        # Validate when is allowed to add Admin role
-        user = None
-        request = self.context.get('request')
-        if request and hasattr(request, 'user'):
-            user = request.user
+        if role not in [User.CLIENT, User.REALTOR, User.ADMIN]:
+            raise serializers.ValidationError('Invalid role.')
         
-        if not user or (user and user.role != User.ADMIN):
-            raise serializers.ValidationError('Role Admin is protected.')
+        # Only allow Admin registration with an Admin authorization role
+        if role == User.ADMIN:
+            request = self.context.get('request')
+            if request and hasattr(request, 'user'):
+                if hasattr(request.user, 'role') and request.user.role == User.ADMIN:
+                    return role
+            raise serializers.ValidationError('Admin role is protected.')
 
         return role
     

@@ -14,12 +14,12 @@ class UserPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         if request.user.role == User.ADMIN:
+            # Admin should not delete himself
+            if view.action == 'destroy':
+                return request.user.id != obj.id
             return True
 
         if view.action in ['retrieve', 'update', 'partial_update', 'upload_avatar']:
             return request.user.id == obj.id
-        
-        if view.action == 'destroy':
-            return request.user.id != obj.id
 
         return False

@@ -1,37 +1,57 @@
 from users.models import User
+from allauth.account.models import EmailAddress
 
 class UserFactory:
     @staticmethod
-    def create_regular_user(username='regular'):
+    def create_client(email='client@test.com', verified=False):
         data = {
-            'username': username,
-            'email': 'regular@test.com',
+            'username': email,
+            'email': email,
             'password': '@abc123',
-            'first_name': 'Regular',
+            'first_name': 'Client',
             'last_name': 'User',
         }
-        return User.objects.create_user(**data)
+        user = User.objects.create_user(**data)
+
+        EmailAddress.objects.create(**{
+            'user': user,
+            'email': email,
+            'verified': verified
+        })
+        return user
 
     @staticmethod
-    def create_admin_user(username='admin'):
+    def create_admin(email='admin@test.com', verified=False):
         data = {
-            'username': username,
-            'email': 'admin@test.com',
+            'username': email,
+            'email': email,
             'password': '@abc123',
             'first_name': 'Admin',
             'last_name': 'User',
             'role': 'Admin'
         }
-        return User.objects.create_user(**data)
+        user = User.objects.create_user(**data)
+        EmailAddress.objects.create(**{
+            'user': user,
+            'email': email,
+            'verified': verified
+        })
+        return user
 
     @staticmethod
-    def create_manager_user(uesrname='manager'):
+    def create_realtor(email="realtor@test.com", verified=False):
         data = {
-            'username': uesrname,
-            'email': 'manager@test.com',
+            'username': email,
+            'email': email,
             'password': '@abc123',
-            'first_name': 'Manager',
+            'first_name': 'Realtor',
             'last_name': 'User',
-            'role': 'Manager'
+            'role': 'Realtor'
         }
-        return User.objects.create_user(**data)
+        user = User.objects.create_user(**data)
+        EmailAddress.objects.create(**{
+            'user': user,
+            'email': email,
+            'verified': verified
+        })
+        return user
