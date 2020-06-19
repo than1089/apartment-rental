@@ -11,6 +11,7 @@ const initState = {
     email: '',
     username: '',
     password: '',
+    role: '',
     is_active: true,
   },
   submitted: false,
@@ -18,8 +19,8 @@ const initState = {
 };
 
 const getUserDataForModal = (user) => {
-  const { id, first_name, last_name, email, username, password, is_active } = user;
-  return { id, first_name, last_name, email, username, password, is_active };
+  const { id, first_name, last_name, email, username, password, role, is_active } = user;
+  return { id, first_name, last_name, email, username, password, role, is_active };
 }
 
 class UserModal extends React.Component {
