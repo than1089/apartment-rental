@@ -191,3 +191,8 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 REST_USE_JWT = True
+
+
+# Configure Django App for Heroku.
+# import django_heroku
+# django_heroku.settings(locals())
