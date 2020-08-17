@@ -148,6 +148,7 @@ STATIC_URL = '/static/'
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
+    'https://tn-apartment-rental.herokuapp.com'
 ]
 
 AUTHENTICATION_BACKENDS = (
