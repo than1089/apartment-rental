@@ -236,7 +236,7 @@ function uploadAvatar(userId, files) {
 
   function updateToLocalStorage(profile_img) {
     const auth = JSON.parse(localStorage.getItem('auth'));
-    auth.user.profile_img = process.env.REACT_APP_BACKEND_HOST + profile_img;
+    auth.user.profile_img = process.env.REACT_APP_BACKEND_HOST + '/' + profile_img;
     localStorage.setItem('auth', JSON.stringify(auth));
   }
 

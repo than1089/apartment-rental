@@ -45,7 +45,7 @@ export function authentication(state = initialState, action) {
       }
     case userConstants.UPLOAD_AVATAR_SUCCESS:
       const user = Object.assign({}, state.user);
-      user.profile_img = process.env.REACT_APP_BACKEND_HOST + action.profile_img;
+      user.profile_img = process.env.REACT_APP_BACKEND_HOST + '/' + action.profile_img;
       return {
         user
       }

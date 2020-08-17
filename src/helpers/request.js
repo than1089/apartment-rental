@@ -18,3 +18,8 @@ export function handleResponse(response) {
         }
     });
 }
+
+export function fetchAPI(path, headers) {
+    const domain = process.env.REACT_APP_BACKEND_HOST || ''; 
+    return fetch(`${domain}${path}`, headers);
+} 

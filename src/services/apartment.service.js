@@ -1,4 +1,4 @@
-import { authHeader, handleResponse } from '../helpers';
+import { authHeader, handleResponse, fetchAPI } from '../helpers';
 
 export const apartmentService = {
     fetchAll,
@@ -13,7 +13,7 @@ async function fetchAll(url=null) {
         method: 'GET',
         headers: authHeader()
     };
-    const response = await fetch(url, requestOptions);
+    const response = await fetchAPI(url, requestOptions);
     return await handleResponse(response);
 }
 
@@ -24,7 +24,7 @@ async function create(Apartment) {
         body: JSON.stringify(Apartment),
     };
 
-    const response = await fetch(`/api/apartments/`, requestOptions);
+    const response = await fetchAPI(`/api/apartments/`, requestOptions);
     return await handleResponse(response);
 }
 
@@ -35,7 +35,7 @@ async function update(apartment) {
         body: JSON.stringify(apartment),
     };
 
-    const response = await fetch(`/api/apartments/${apartment.id}/`, requestOptions);
+    const response = await fetchAPI(`/api/apartments/${apartment.id}/`, requestOptions);
     return await handleResponse(response);
 }
 
@@ -45,6 +45,6 @@ async function _delete(apartment) {
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
     };
 
-    const response = await fetch(`/api/apartments/${apartment.id}`, requestOptions);
+    const response = await fetchAPI(`/api/apartments/${apartment.id}`, requestOptions);
     return await handleResponse(response);
 }

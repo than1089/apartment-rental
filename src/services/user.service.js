@@ -1,4 +1,4 @@
-import { authHeader, handleResponse } from '../helpers';
+import { authHeader, handleResponse, fetchAPI } from '../helpers';
 
 export const userService = {
     login,
@@ -21,7 +21,7 @@ async function login(email, password) {
         body: JSON.stringify({ email, password })
     };
 
-    const response = await fetch(`rest-auth/login/`, requestOptions);
+    const response = await fetchAPI(`/rest-auth/login/`, requestOptions);
     const auth = await handleResponse(response);
     storeAuth(auth);
     return auth;
@@ -33,7 +33,7 @@ async function logout() {
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
     };
 
-    await fetch(`rest-auth/logout/`, requestOptions);
+    await fetchAPI(`/rest-auth/logout/`, requestOptions);
     
     localStorage.removeItem('auth');
     return true;
@@ -45,7 +45,7 @@ async function getAll(url) {
         headers: authHeader()
     };
 
-    const response = await fetch(url, requestOptions);
+    const response = await fetchAPI(url, requestOptions);
     return handleResponse(response);
 }
 
@@ -55,7 +55,7 @@ async function getById(id) {
         headers: authHeader()
     };
 
-    const response = await fetch(`/api/users/${id}`, requestOptions);
+    const response = await fetchAPI(`/api/users/${id}`, requestOptions);
     return handleResponse(response);
 }
 
@@ -66,7 +66,7 @@ async function register(user) {
         body: JSON.stringify(user)
     };
 
-    const response = await fetch(`/rest-auth/registration/`, requestOptions);
+    const response = await fetchAPI(`/rest-auth/registration/`, requestOptions);
     return handleResponse(response);
 }
 
@@ -77,7 +77,7 @@ async function update(user) {
         body: JSON.stringify(user)
     };
 
-    const response = await fetch(`/api/users/${user.id}/`, requestOptions);
+    const response = await fetchAPI(`/api/users/${user.id}/`, requestOptions);
     return handleResponse(response);;
 }
 
@@ -87,7 +87,7 @@ async function _delete(user) {
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
     };
 
-    const response = await fetch(`/api/users/${user.id}`, requestOptions);
+    const response = await fetchAPI(`/api/users/${user.id}`, requestOptions);
     return handleResponse(response);
 }
 
@@ -98,7 +98,7 @@ async function verifyEmail(key) {
         body: JSON.stringify({key})
     };
 
-    const response = await fetch('/rest-auth/registration/verify-email/', requestOptions);
+    const response = await fetchAPI('/rest-auth/registration/verify-email/', requestOptions);
     return handleResponse(response);;
 }
 
@@ -109,7 +109,7 @@ async function loginSocial(provider, accessToken) {
         body: JSON.stringify({access_token: accessToken})
     };
 
-    const response = await fetch(`/rest-auth/${provider}/`, requestOptions);
+    const response = await fetchAPI(`/rest-auth/${provider}/`, requestOptions);
     const auth = await handleResponse(response);
     storeAuth(auth);
     return auth;
@@ -126,7 +126,7 @@ async function invite(email) {
         body: JSON.stringify({ email })
     };
 
-    const response = await fetch(`/api/users/invite/`, requestOptions);
+    const response = await fetchAPI(`/api/users/invite/`, requestOptions);
     return await handleResponse(response)
 }
 
@@ -138,6 +138,6 @@ async function uploadAvatar(userId, files) {
         headers: { ...authHeader()},
         body: formData
     };
-    const response = await fetch(`/api/users/${userId}/upload_avatar/`, requestOptions);
+    const response = await fetchAPI(`/api/users/${userId}/upload_avatar/`, requestOptions);
     return await handleResponse(response);
 }
