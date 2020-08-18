@@ -5,9 +5,11 @@ import { apartmentService } from '../../services';
 const initState = {
   list: {results: []},
   map: {results: []},
+  single: null,
   management: {results: []},
   filters: null,
-  managementUrl: apartmentService.apartmentUrl
+  managementUrl: apartmentService.apartmentUrl,
+  loading: false,
 }
 
 export function apartments(state = initState, action) {
@@ -15,6 +17,7 @@ export function apartments(state = initState, action) {
     case apartmentConstants.FETCH_ALL_REQUEST:
     case apartmentConstants.UPDATE_REQUEST:
     case apartmentConstants.DELETE_REQUEST:
+    case apartmentConstants.FETCH_APARTMENT_REQUEST:
       return {
         ...state,
         loading: true,
@@ -26,11 +29,19 @@ export function apartments(state = initState, action) {
         loading: false,
         [action.page]: action.apartments
       }
+    
+    case apartmentConstants.FETCH_APARTMENT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        single: action.apartment,
+      }
 
     case apartmentConstants.FETCH_ALL_FAILURE:
     case apartmentConstants.CREATE_FAILURE:
     case apartmentConstants.UPDATE_FAILURE:
     case apartmentConstants.DELETE_FAILURE:
+    case apartmentConstants.FETCH_APARTMENT_FAILURE:
       return {
         ...state,
         loading: false,

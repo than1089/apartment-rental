@@ -150,14 +150,15 @@ class ApartmentMapView extends React.Component {
     const badge = apartment.status === 'Available' ? 'success' : 'danger';
     return `
       <h6>${apartment.name}</h6>
-      <img src="${apartment.image || (process.env.PUBLIC_URL + '/apartment-placeholder.png')}" width="100"/>
       <p style="max-width: 280px; margin-top: 10px">${apartment.address}</p>
       <strong>
       $${apartment.price_per_month}/month &nbsp;&nbsp;
       ${apartment.floor_area_size} m2 &nbsp;&nbsp;
       ${apartment.number_of_rooms} rooms
       <span class="badge badge-${badge} ml-1">${apartment.status}</span>
-      </strong>`;
+      </strong><br/>
+      <a class="btn btn-sm btn-primary mt-2" style="color: #fff" href="${process.env.PUBLIC_URL}/apartment/${apartment.id}">Details</a>
+      `;
   }
 
   render() {

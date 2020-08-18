@@ -3,6 +3,7 @@ import { authHeader, handleResponse, fetchAPI } from '../helpers';
 export const apartmentService = {
     fetchAll,
     create,
+    get,
     update,
     delete: _delete,
     apartmentUrl: '/api/apartments/'
@@ -29,6 +30,16 @@ async function create(apartment) {
     };
 
     const response = await fetchAPI(`/api/apartments/`, requestOptions);
+    return await handleResponse(response);
+}
+
+async function get(apartmentId) {
+    const requestOptions = {
+        method: 'GET',
+        headers: { ...authHeader()},
+    };
+
+    const response = await fetchAPI(`/api/apartments/${apartmentId}`, requestOptions);
     return await handleResponse(response);
 }
 

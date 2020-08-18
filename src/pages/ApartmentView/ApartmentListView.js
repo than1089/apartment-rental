@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Badge, Card } from 'react-bootstrap';
 import { apartmentActions } from '../../redux/actions';
@@ -37,17 +38,19 @@ class ApartmentListView extends React.Component {
             <div className="col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-4 d-flex" key={index}>
               <Card>
                 {!!item.image &&
-                  <Card.Img src={item.image} className="img-fluid" alt="Image"/>
+                  <Link to={`/apartment/${item.id}`}>
+                    <Card.Img src={item.image} className="img-fluid" alt="Image"/>
+                  </Link>
                 }
                 {!item.image &&
                   <Card.Img src={process.env.PUBLIC_URL + '/apartment-placeholder.png'} className="img-fluid" alt="No Pic"/>
                 }
                 <Card.Body className="d-flex flex-column">
-                  <Card.Title>{item.name}</Card.Title>
                   <div className="d-flex flex-column flex-grow-1">
-                    <div className="text-secondary flex-grow-1">
-                      
-                      <p>{item.description}</p>
+                    <Link to={`/apartment/${item.id}`} className="text-dark">
+                      <Card.Title>{item.name}</Card.Title>
+                    </Link>
+                    <div className="flex-grow-1">
                     </div>
                     <div>
                       <p><i className="fa fa-map-marker-alt"></i> {item.address}</p>

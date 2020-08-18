@@ -21,5 +21,8 @@ footer {
   background: linear-gradient(to right, #2196f3, #33AEFF);
 }
 .bg-dark-blue {
-  background-color: #0f256e;
+  background-color: #0f256e!important;
+}
+.text-dark-blue {
+  color: #0f256e!important;
 }

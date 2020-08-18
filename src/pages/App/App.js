@@ -6,6 +6,7 @@ import { history } from '../../helpers';
 import { alertActions } from '../../redux/actions';
 import { PrivateRoute } from '../../components';
 import { ApartmentListView, ApartmentMapView } from '../ApartmentView';
+import { ApartmentDetail } from '../ApartmentDetail';
 import { ApartmentManagement } from '../ApartmentManagement';
 import { UserManagement } from '../UserManagement';
 import { VerifyEmail } from '../VerifyEmail';
@@ -87,6 +88,7 @@ class App extends React.Component {
               }
                 <Switch>
                   <PrivateRoute exact path="/" component={ApartmentListView} />
+                  <PrivateRoute path="/apartment/:apartmentId" component={ApartmentDetail} />
                   <PrivateRoute exact path="/map" component={ApartmentMapView} />
                   <PrivateRoute exact path="/user-management" component={UserManagement} />
                   <PrivateRoute exact path="/apartment-management" component={ApartmentManagement} />

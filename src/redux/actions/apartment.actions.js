@@ -7,6 +7,7 @@ import { store } from '../../helpers/store';
 export const apartmentActions = {
   fetchAll,
   create,
+  get,
   update,
   delete: _delete,
   setFilters,
@@ -65,6 +66,27 @@ function create(apartment) {
   function request() { return { type: apartmentConstants.CREATE_REQUEST } }
   function success(apartment) { return { type: apartmentConstants.CREATE_SUCCESS, apartment } }
   function failure(error) { return { type: apartmentConstants.CREATE_FAILURE, error } }
+}
+
+function get(apartmentId) {
+  return dispatch => {
+    dispatch(request());
+
+    apartmentService.get(apartmentId)
+      .then(
+        apartment => {
+          dispatch(success(apartment));
+        },
+        error => {
+          dispatch(failure(error));
+          dispatch(alertActions.error(error));
+        }
+      );
+  };
+
+  function request() { return { type: apartmentConstants.FETCH_APARTMENT_REQUEST } }
+  function success(apartment) { return { type: apartmentConstants.FETCH_APARTMENT_SUCCESS, apartment } }
+  function failure(error) { return { type: apartmentConstants.FETCH_APARTMENT_FAILURE, error } }
 }
 
 function update(apartment) {
