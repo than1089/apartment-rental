@@ -1,7 +1,6 @@
 import React from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { GoogleApiWrapper } from 'google-maps-react';
-import { apartmentActions } from '../../redux/actions';
 
 
 const initState = {

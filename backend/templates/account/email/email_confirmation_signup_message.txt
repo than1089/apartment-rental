@@ -2,7 +2,7 @@
 
 You're receiving this e-mail because user {{ user_display }} has given yours as an e-mail address to connect their account.
 
-To confirm this is correct, go to http://localhost:3000/verify-email/?key={{ key }}
+To confirm this is correct, go to {{ site_domain }}/verify-email/?key={{ key }}
 {% endblocktrans %}
 {% blocktrans with site_name=current_site.name site_domain=current_site.domain %}Thank you from {{ site_name }}!
 {{ site_domain }}{% endblocktrans %}
