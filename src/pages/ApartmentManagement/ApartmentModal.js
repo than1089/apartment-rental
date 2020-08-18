@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { GoogleApiWrapper } from 'google-maps-react';
+import { apartmentActions } from '../../redux/actions';
 
 
 const initState = {
@@ -221,8 +222,8 @@ class ApartmentModal extends React.Component {
                     accept="image/png, image/jpeg"
                   >
                   </Form.Control>
-                  {!!apartment.image &&
-                    <img src={apartment.image} width="50" alt="Apartment"/>
+                  {!!apartment.image && typeof apartment.image == 'string' &&
+                    <img src={apartment.image} width="80" className="mt-2" alt="Apartment"/>
                   }
                 </Form.Group>
 
