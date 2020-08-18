@@ -221,6 +221,9 @@ class ApartmentModal extends React.Component {
                     accept="image/png, image/jpeg"
                   >
                   </Form.Control>
+                  {!!apartment.image &&
+                    <img src={apartment.image} width="50" alt="Apartment"/>
+                  }
                 </Form.Group>
 
                 <Form.Group controlId="price_per_month">
