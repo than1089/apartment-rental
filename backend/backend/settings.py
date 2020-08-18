@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'apartments',
     'users',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -178,13 +179,22 @@ TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
 SITE_ID = 1
 
+# Sendgrid config
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
 EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'info@tn-apartment-rental.herokuapp.com'
+DEFAULT_FROM_EMAIL = 'than1089@gmail.com'
+
+# Amazon config
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME')
 
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'users.serializers.UserSerializer',
@@ -197,7 +207,6 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 REST_USE_JWT = True
-
 
 # Configure Django App for Heroku.
 import django_heroku
