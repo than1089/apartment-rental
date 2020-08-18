@@ -130,6 +130,11 @@ class Login extends React.Component {
                 </SocialButton>
               </div>
             </div>
+            <div className="mt-3">
+              Client: client@example.com<br/>
+              Realtor: realor1@example.com<br/>
+              Pass: 123456
+            </div>
           </div>
         </div>
       </div>
