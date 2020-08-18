@@ -26,7 +26,7 @@ class ApartmentListView extends React.Component {
   }
 
   render() {
-    const { list } = this.props;
+    const { list, loading } = this.props;
     return (
       <div>
         <h2 className="mb-4">Apartments</h2>
@@ -66,12 +66,17 @@ class ApartmentListView extends React.Component {
               </Card>
             </div>
           )}
-          {!list.results.length &&
+          {!list.results.length && !loading &&
             <div className="col text-center">
               <h3><i className="far fa-sad-cry" aria-hidden="true"></i> No results found!</h3>
             </div>
           }
         </div>
+        {loading &&
+          <div className="text-center">
+            <img src={process.env.PUBLIC_URL + '/loading.gif'} width="100" alt="Loading..."/>
+          </div>
+        }
         <Pagination
           count={list.count}
           next={list.next}
@@ -86,7 +91,8 @@ class ApartmentListView extends React.Component {
 function mapState(state) {
   return {
     list: state.apartments.list,
-    filters: state.apartments.filters
+    filters: state.apartments.filters,
+    loading: state.apartments.loading
   };
 }
 
