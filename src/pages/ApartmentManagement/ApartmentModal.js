@@ -8,6 +8,7 @@ const initState = {
     id: -1,
     name: '',
     description: '',
+    image: null,
     price_per_month: '',
     number_of_rooms: '',
     floor_area_size: '',
@@ -27,6 +28,7 @@ class ApartmentModal extends React.Component {
     this.state = {...initState};
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleImageChange = this.handleImageChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSwitch = this.handleSwitch.bind(this);
     this.handlgeAddressChange = this.handlgeAddressChange.bind(this);
@@ -98,6 +100,26 @@ class ApartmentModal extends React.Component {
         [name]: value
       }
     });
+  }
+
+  handleImageChange(event) {
+    const files = event.target.files;
+    const { apartment } = this.state;
+    if (files.length) {
+      this.setState({
+        apartment: {
+          ...apartment,
+          image: files[0]
+        }
+      });
+    } else {
+      this.setState({
+        apartment: {
+          ...apartment,
+          image: null
+        }
+      });
+    }
   }
 
   handleSwitch(e) {
@@ -188,6 +210,17 @@ class ApartmentModal extends React.Component {
                   <Form.Label>Description</Form.Label>
                   <Form.Control as="textarea" placeholder="Description" name="description"
                     onChange={this.handleChange} value={apartment.description}/>
+                </Form.Group>
+
+                <Form.Group controlId="description">
+                  <Form.Label>Image</Form.Label>
+                  <Form.Control
+                    type="file"
+                    onChange={this.handleImageChange}
+                    name="profile_img"
+                    accept="image/png, image/jpeg"
+                  >
+                  </Form.Control>
                 </Form.Group>
 
                 <Form.Group controlId="price_per_month">

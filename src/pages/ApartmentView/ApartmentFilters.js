@@ -41,7 +41,7 @@ class ApartmentFilters extends React.Component {
     return (
       <Form onSubmit={this.handleSubmit}>
         <Form.Row>
-          <Form.Group className="col-md-2 col-sm-6" controlId="min-size">
+          <Form.Group className="col-lg-2 col-md-4 col-sm-6" controlId="min-size">
             <Form.Label>Min Size (m2)</Form.Label>
             <Form.Control
               as="select"
@@ -61,7 +61,7 @@ class ApartmentFilters extends React.Component {
               <option value="300">300</option>
             </Form.Control>
           </Form.Group>
-          <Form.Group className="col-md-2 col-sm-6" controlId="max-size">
+          <Form.Group className="col-lg-2 col-md-4 col-sm-6" controlId="max-size">
             <Form.Label>Max Size (m2)</Form.Label>
             <Form.Control
               as="select"
@@ -80,7 +80,7 @@ class ApartmentFilters extends React.Component {
               <option value="400">400</option>
             </Form.Control>
           </Form.Group>
-          <Form.Group className="col-md-2 col-sm-6" controlId="min-price">
+          <Form.Group className="col-lg-2 col-md-4 col-sm-6" controlId="min-price">
             <Form.Label>Min Price ($)</Form.Label>
             <Form.Control
               as="select"
@@ -108,7 +108,7 @@ class ApartmentFilters extends React.Component {
               <option value="5000">5000</option>
             </Form.Control>
           </Form.Group>
-          <Form.Group className="col-md-2 col-sm-6" controlId="max-price">
+          <Form.Group className="col-lg-2 col-md-4 col-sm-6" controlId="max-price">
             <Form.Label>Max Price ($)</Form.Label>
             <Form.Control
               as="select"
@@ -137,7 +137,7 @@ class ApartmentFilters extends React.Component {
               <option value="8000">8000</option>
             </Form.Control>
           </Form.Group>
-          <Form.Group className="col-md-2 col-sm-6" controlId="number-of-rooms">
+          <Form.Group className="col-lg-2 col-md-4 col-sm-6" controlId="number-of-rooms">
             <Form.Label>Rooms</Form.Label>
             <Form.Control
               as="select"
@@ -158,10 +158,10 @@ class ApartmentFilters extends React.Component {
               <option value="10">10</option>
             </Form.Control>
           </Form.Group>
-          <Form.Group className="col-md-2 col-sm-6">
+          <Form.Group className="col-lg-2 col-md-4 col-sm-6">
             <Form.Label className="d-sm-block">&nbsp;</Form.Label>
             <div>
-              <Button variant="primary" type="submit" className="mr-1">Find Apartments</Button>
+              <Button variant="primary" type="submit" className="mr-1 px-4">Search</Button>
               <Button variant="outline-dark"
                 onClick={() => this.setState(initState)}>X</Button>
             </div>

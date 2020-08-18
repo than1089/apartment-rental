@@ -18,6 +18,7 @@ class Apartment(models.Model):
     price_per_month = models.DecimalField(max_digits=9, decimal_places=2)
     number_of_rooms = models.SmallIntegerField()
     address = models.CharField(max_length=255)
+    image = models.ImageField(upload_to="apartments", null=True)
     lat = models.DecimalField(max_digits=9, decimal_places=6, help_text="Location Latitude")
     lng = models.DecimalField(max_digits=9, decimal_places=6, help_text="Location Longitude")
     location = PointField(null=True, srid=4326, geography=False)

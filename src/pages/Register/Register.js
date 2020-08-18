@@ -9,7 +9,7 @@ import { userActions } from '../../redux/actions';
 const registerCardStyle = {
   maxWidth: 450,
   margin: 'auto',
-  marginTop: 50,
+  marginTop: 20,
 };
 
 class Register extends React.Component {
@@ -33,6 +33,13 @@ class Register extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    document.body.classList.add('bg-blue-gradient');
+  }
+  componentWillUnmount() {
+    document.body.classList.remove('bg-blue-gradient');
   }
 
   handleChange(event) {
@@ -67,9 +74,12 @@ class Register extends React.Component {
     const { user, submitted } = this.state;
     return (
       <div style={registerCardStyle}>
+        <div class="text-center mb-4">
+          <img src={process.env.PUBLIC_URL + '/logo.png'} width="200" alt="Logo"/>
+        </div>
         <div className="card shadow-sm">
           <div className="card-body">
-            <h2 className="card-title">Register</h2>
+            <h2 className="card-title text-center">Register</h2>
             <Form onSubmit={this.handleSubmit}>
               <Form.Group controlId="first_name">
                 <Form.Control type="text" placeholder="First Name" name="first_name" autoComplete="off"

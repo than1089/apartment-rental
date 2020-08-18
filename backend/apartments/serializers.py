@@ -6,6 +6,7 @@ from django.contrib.gis.geos import Point
 
 class ApartmentSerializer(serializers.ModelSerializer):
     description = serializers.CharField(allow_blank=True, required=False)
+    image = serializers.ImageField()
     realtor = serializers.SerializerMethodField()
     lat = serializers.DecimalField(max_digits=9, decimal_places=6)
     lng = serializers.DecimalField(max_digits=9, decimal_places=6)

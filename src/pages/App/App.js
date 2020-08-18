@@ -36,9 +36,11 @@ class App extends React.Component {
       <Router history={history}>
         <div className="wrapper">
           {user && !authentication.loggingIn &&
-            <Navbar bg="dark" variant="dark" expand="lg" className="mb-4">
+            <Navbar bg="dark-blue" variant="dark" expand="lg" className="mb-4">
               <Navbar.Brand>
-                <Link to="/" className="nav-link" role="button">Apartment Rentals</Link>
+                <Link to="/" className="nav-link" role="button">
+                  <img src={process.env.PUBLIC_URL + '/logo.png'} width="120" alt="Logo"/>
+                </Link>
               </Navbar.Brand>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
@@ -65,7 +67,7 @@ class App extends React.Component {
                 }
                 {!user.profile_img &&
                   <NavItem>
-                    <img src="/avatar.jpg" width="30" height="30" className="profile-image" alt="Avatar"/>
+                    <img src={process.env.PUBLIC_URL + '/avatar.jpg'} width="30" height="30" className="profile-image" alt="Avatar"/>
                   </NavItem>
                 }
               </Navbar.Collapse>
@@ -96,6 +98,11 @@ class App extends React.Component {
                 </Switch>
             </div>
           </div>
+          <footer>
+            <div className="container-fluid">
+              <div className="p-2 text-center">@ Apartment Rental 2020</div>
+            </div>
+          </footer>
         </div>
       </Router>
     );

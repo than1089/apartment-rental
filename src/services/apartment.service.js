@@ -17,11 +17,15 @@ async function fetchAll(url=null) {
     return await handleResponse(response);
 }
 
-async function create(Apartment) {
+async function create(apartment) {
+    const formData = new FormData();
+    for ( var key in apartment ) {
+        formData.append(key, apartment[key]);
+    }
     const requestOptions = {
         method: 'POST',
-        headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify(Apartment),
+        headers: { ...authHeader()},
+        body: formData
     };
 
     const response = await fetchAPI(`/api/apartments/`, requestOptions);
@@ -29,10 +33,14 @@ async function create(Apartment) {
 }
 
 async function update(apartment) {
+    const formData = new FormData();
+    for ( var key in apartment ) {
+        formData.append(key, apartment[key]);
+    }
     const requestOptions = {
         method: 'PUT',
-        headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify(apartment),
+        headers: { ...authHeader()},
+        body: formData
     };
 
     const response = await fetchAPI(`/api/apartments/${apartment.id}/`, requestOptions);

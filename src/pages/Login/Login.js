@@ -9,7 +9,7 @@ import SocialButton from './SocialButton';
 const loginCardStyle = {
   maxWidth: 400,
   margin: 'auto',
-  marginTop: 100,
+  marginTop: 50,
 };
 
 
@@ -31,6 +31,13 @@ class Login extends React.Component {
 
     this.onLoginSuccess = this.onLoginSuccess.bind(this);
     this.onLoginFailure = this.onLoginFailure.bind(this);
+  }
+
+  componentDidMount() {
+    document.body.classList.add('bg-blue-gradient');
+  }
+  componentWillUnmount() {
+    document.body.classList.remove('bg-blue-gradient');
   }
 
   handleChange(e) {
@@ -61,9 +68,12 @@ class Login extends React.Component {
     const { email, password, submitted } = this.state;
     return (
       <div style={loginCardStyle}>
+        <div class="text-center mb-4">
+          <img src={process.env.PUBLIC_URL + '/logo.png'} width="200" alt="Logo"/>
+        </div>
         <div className="card shadow-sm">
           <div className="card-body">
-            <h2 className="card-title">Login</h2>
+            <h2 className="card-title text-center">Login</h2>
             <Form onSubmit={this.handleSubmit}>
               <Form.Group controlId="email">
                 <Form.Label>Email</Form.Label>

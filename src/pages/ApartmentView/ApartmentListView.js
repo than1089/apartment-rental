@@ -36,10 +36,17 @@ class ApartmentListView extends React.Component {
           {list.results.map((item, index) => 
             <div className="col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-4 d-flex" key={index}>
               <Card>
+                {!!item.image &&
+                  <Card.Img src={item.image} className="img-fluid" alt="Image"/>
+                }
+                {!item.image &&
+                  <Card.Img src={process.env.PUBLIC_URL + '/apartment-placeholder.png'} className="img-fluid" alt="No Pic"/>
+                }
                 <Card.Body className="d-flex flex-column">
                   <Card.Title>{item.name}</Card.Title>
                   <div className="d-flex flex-column flex-grow-1">
                     <div className="text-secondary flex-grow-1">
+                      
                       <p>{item.description}</p>
                     </div>
                     <div>
