@@ -43,7 +43,9 @@ class ApartmentListView extends React.Component {
                   </Link>
                 }
                 {!item.image &&
-                  <Card.Img src={process.env.PUBLIC_URL + '/apartment-placeholder.png'} className="img-fluid" alt="No Pic"/>
+                  <Link to={`/apartment/${item.id}`}>
+                    <Card.Img src={process.env.PUBLIC_URL + '/apartment-placeholder.png'} className="img-fluid" alt="No Pic"/>
+                  </Link>
                 }
                 <Card.Body className="d-flex flex-column">
                   <div className="d-flex flex-column flex-grow-1">
