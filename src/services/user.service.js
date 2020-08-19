@@ -135,7 +135,7 @@ async function uploadAvatar(userId, files) {
     formData.append('profile_img', files[0], files[0].name);
     const requestOptions = {
         method: 'POST',
-        headers: { ...authHeader()},
+        headers: authHeader(),
         body: formData
     };
     const response = await fetchAPI(`/api/users/${userId}/upload_avatar/`, requestOptions);

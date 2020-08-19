@@ -25,9 +25,10 @@ class ApartmentDetail extends React.Component {
             <div className="row">
               <div className="col-md-6 col-sm-12 mb-4">
                 <h1>{apartment.name}</h1>
-                <img src={ apartment.image || (process.env.PUBLIC_URL + '/apartment-placeholder.png')} alt="Apartment Thumbnail" />
+                <img src={ apartment.image || (process.env.PUBLIC_URL + '/apartment-placeholder.png')}
+                  alt="Apartment Thumbnail" className="mb-3 img-fluid" />
                 <p><i className="fa fa-map-marker-alt"></i> {apartment.address}</p>
-                <div className="text-info">
+                <div className="text-info d-flex flex-wrap">
                   <span className="text-nowrap mr-3"><i className="fas fa-money-bill-alt"></i> ${apartment.price_per_month}/month</span>
                   <span className="text-nowrap mr-3"><i className="fas fa-bed"></i> {apartment.number_of_rooms} room{apartment.number_of_rooms !== 1 ? 's' : ''}</span>
                   <span className="text-nowrap"><i className="fas fa-pencil-ruler"></i> {apartment.floor_area_size} m2</span>

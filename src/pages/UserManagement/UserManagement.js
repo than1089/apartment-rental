@@ -86,60 +86,62 @@ class UserManagement extends React.Component {
           show={inviteModalShow}
           onHide={() => this.setState({inviteModalShow: false})}
         />
-        <Table bordered hover size="sm">
-          <thead>
-            <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th className="text-center">Active</th>
-              <th className="text-center">Email Verified</th>
-              <th className="text-center">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.results.map((user, index) =>
-              <tr key={index}>
-                <td>{user.first_name}</td>
-                <td>{user.last_name}</td>
-                <td>{user.email}</td>
-                <td>{user.role}</td>
-                <td className="text-center">
-                  {user.is_active && 
-                    <i className="fa fa-check text-success"></i>
-                  }
-                  {!user.is_active && 
-                    <i className="fa fa-times text-danger"></i>
-                  }
-                </td>
-                <td className="text-center">
-                  {user.verified_email && 
-                    <i className="fa fa-check text-success"></i>
-                  }
-                  {!user.verified_email && 
-                    <i className="fa fa-times text-danger"></i>
-                  }
-                </td>
-                <td style={{whiteSpace: 'nowrap'}} className="text-center">
-                  <Button size="sm" variant="outline-secondary mr-2" onClick={() => this.editUser(user)}>
-                    <i className="fa fa-pencil"></i></Button>
-                  {authentication.user.id !== user.id &&
-                    <Button size="sm" variant="outline-danger" onClick={() => this.deleteUser(user)}>
-                      <i className="fa fa-trash"></i></Button>
-                  }
-                  {authentication.user.id === user.id && <span style={{width: 32, display: 'inline-block'}}></span>}
-                </td>
-              </tr>
-            )
-            }
-            {!users.results.length &&
+        <div className="table-responsive">
+          <Table bordered hover size="sm">
+            <thead>
               <tr>
-                <td className="text-center" colSpan="7">No results.</td>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th className="text-center">Active</th>
+                <th className="text-center">Email Verified</th>
+                <th className="text-center">Actions</th>
               </tr>
-            }
-          </tbody>
-        </Table>
+            </thead>
+            <tbody>
+              {users.results.map((user, index) =>
+                <tr key={index}>
+                  <td>{user.first_name}</td>
+                  <td>{user.last_name}</td>
+                  <td>{user.email}</td>
+                  <td>{user.role}</td>
+                  <td className="text-center">
+                    {user.is_active && 
+                      <i className="fa fa-check text-success"></i>
+                    }
+                    {!user.is_active && 
+                      <i className="fa fa-times text-danger"></i>
+                    }
+                  </td>
+                  <td className="text-center">
+                    {user.verified_email && 
+                      <i className="fa fa-check text-success"></i>
+                    }
+                    {!user.verified_email && 
+                      <i className="fa fa-times text-danger"></i>
+                    }
+                  </td>
+                  <td style={{whiteSpace: 'nowrap'}} className="text-center">
+                    <Button size="sm" variant="outline-secondary mr-2" onClick={() => this.editUser(user)}>
+                      <i className="fa fa-pencil"></i></Button>
+                    {authentication.user.id !== user.id &&
+                      <Button size="sm" variant="outline-danger" onClick={() => this.deleteUser(user)}>
+                        <i className="fa fa-trash"></i></Button>
+                    }
+                    {authentication.user.id === user.id && <span style={{width: 32, display: 'inline-block'}}></span>}
+                  </td>
+                </tr>
+              )
+              }
+              {!users.results.length &&
+                <tr>
+                  <td className="text-center" colSpan="7">No results.</td>
+                </tr>
+              }
+            </tbody>
+          </Table>
+        </div>
         <Pagination
           count={users.count}
           next={users.next}

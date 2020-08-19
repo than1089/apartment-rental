@@ -56,7 +56,7 @@ class ApartmentListView extends React.Component {
                     </div>
                     <div>
                       <p><i className="fa fa-map-marker-alt"></i> {item.address}</p>
-                      <div className="text-info">
+                      <div className="text-info d-flex flex-wrap">
                         <span className="text-nowrap mr-3"><i className="fas fa-money-bill-alt"></i> ${item.price_per_month}/month</span>
                         <span className="text-nowrap mr-3"><i className="fas fa-bed"></i> {item.number_of_rooms} room{item.number_of_rooms !== 1 ? 's' : ''}</span>
                         <span className="text-nowrap"><i className="fas fa-pencil-ruler"></i> {item.floor_area_size} m2</span>

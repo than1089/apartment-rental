@@ -85,57 +85,59 @@ class ApartmentManagement extends React.Component {
           createApartment={this.props.createApartment}
           updateApartment={this.props.updateApartment}
         />
-        <Table bordered hover size="sm">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th width="15%">Description</th>
-              <th>Price ($)</th>
-              <th className="text-center">Rooms</th>
-              <th>Size (m2)</th>
-              {currentRole === 'Admin' &&
-              <th width="12%">Owner</th>
-              }
-              <th width="15%">Address</th>
-              <th className="text-center">Status</th>
-              <th className="text-center">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {apartments.results.map((apartment, index) => 
-                <tr key={index}>
-                  <td>{apartment.name}</td>
-                  <td>{apartment.description}</td>
-                  <td>{apartment.price_per_month}</td>
-                  <td className="text-center">{apartment.number_of_rooms}</td>
-                  <td>{apartment.floor_area_size}</td>
-                  {currentRole === 'Admin' &&
-                    <td>{apartment.realtor}</td>
-                  }
-                  <td>{apartment.address}</td>
-                  <td className="text-center">
-                    <span className={'badge badge-' + (apartment.status === 'Available' ? 'success' : 'danger')}>
-                      {apartment.status}
-                    </span>
-                  </td>
-                  <td style={{whiteSpace: 'nowrap'}} className="text-center">
-                    <Button size="sm" variant="outline-secondary mr-2" onClick={() => this.editApartment(apartment)}>
-                      <i className="fa fa-pencil"></i></Button>
-                    <Button size="sm" variant="outline-danger" onClick={() => this.deleteApartment(apartment)}>
-                      <i className="fa fa-trash"></i></Button>
-                </td>
-                </tr>
-              )
-            }
-            {!apartments.results.length && 
+        <div className="table-responsive">
+          <Table bordered hover size="sm">
+            <thead>
               <tr>
-                <td colSpan={user.role === 'Admin' ? 9 : 8} className="text-center">
-                  No reuslts!
-                </td> 
+                <th>Name</th>
+                <th width="15%">Description</th>
+                <th>Price ($)</th>
+                <th className="text-center">Rooms</th>
+                <th>Size (m2)</th>
+                {currentRole === 'Admin' &&
+                <th width="12%">Owner</th>
+                }
+                <th width="15%">Address</th>
+                <th className="text-center">Status</th>
+                <th className="text-center">Actions</th>
               </tr>
-            }
-          </tbody>
-        </Table>
+            </thead>
+            <tbody>
+              {apartments.results.map((apartment, index) => 
+                  <tr key={index}>
+                    <td>{apartment.name}</td>
+                    <td>{apartment.description}</td>
+                    <td>{apartment.price_per_month}</td>
+                    <td className="text-center">{apartment.number_of_rooms}</td>
+                    <td>{apartment.floor_area_size}</td>
+                    {currentRole === 'Admin' &&
+                      <td>{apartment.realtor}</td>
+                    }
+                    <td>{apartment.address}</td>
+                    <td className="text-center">
+                      <span className={'badge badge-' + (apartment.status === 'Available' ? 'success' : 'danger')}>
+                        {apartment.status}
+                      </span>
+                    </td>
+                    <td style={{whiteSpace: 'nowrap'}} className="text-center">
+                      <Button size="sm" variant="outline-secondary mr-2" onClick={() => this.editApartment(apartment)}>
+                        <i className="fa fa-pencil"></i></Button>
+                      <Button size="sm" variant="outline-danger" onClick={() => this.deleteApartment(apartment)}>
+                        <i className="fa fa-trash"></i></Button>
+                  </td>
+                  </tr>
+                )
+              }
+              {!apartments.results.length && 
+                <tr>
+                  <td colSpan={user.role === 'Admin' ? 9 : 8} className="text-center">
+                    No reuslts!
+                  </td> 
+                </tr>
+              }
+            </tbody>
+          </Table>
+        </div>
         <Pagination
           count={apartments.count}
           next={apartments.next}

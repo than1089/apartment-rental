@@ -25,7 +25,7 @@ async function create(apartment) {
     }
     const requestOptions = {
         method: 'POST',
-        headers: { ...authHeader()},
+        headers: authHeader(),
         body: formData
     };
 
@@ -36,10 +36,10 @@ async function create(apartment) {
 async function get(apartmentId) {
     const requestOptions = {
         method: 'GET',
-        headers: { ...authHeader()},
+        headers: authHeader(),
     };
 
-    const response = await fetchAPI(`/api/apartments/${apartmentId}`, requestOptions);
+    const response = await fetchAPI(`/api/apartments/${apartmentId}/`, requestOptions);
     return await handleResponse(response);
 }
 
@@ -50,7 +50,7 @@ async function update(apartment) {
     }
     const requestOptions = {
         method: 'PUT',
-        headers: { ...authHeader()},
+        headers: authHeader(),
         body: formData
     };
 

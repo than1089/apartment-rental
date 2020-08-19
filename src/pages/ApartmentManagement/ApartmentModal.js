@@ -198,7 +198,7 @@ class ApartmentModal extends React.Component {
         <Form onSubmit={this.handleSubmit}>
           <Modal.Body>
             <div className="row">
-              <div className="col">
+              <div className="col-md-6 col-sm-12">
                 <Form.Group controlId="name">
                   <Form.Label>Name</Form.Label>
                   <Form.Control type="text" isInvalid={submitted && !apartment.name}
@@ -263,7 +263,7 @@ class ApartmentModal extends React.Component {
                     onChange={this.handleSwitch} />
                 </Form.Group>
               </div>
-              <div className="col">
+              <div className="col-md-6 col-sm-12">
                 <Form.Group controlId="address">
                   <Form.Label>Address</Form.Label>
                   <Form.Control type="text" isInvalid={submitted && !apartment.address}
