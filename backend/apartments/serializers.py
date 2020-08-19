@@ -6,7 +6,7 @@ from django.contrib.gis.geos import Point
 
 class ApartmentSerializer(serializers.ModelSerializer):
     description = serializers.CharField(allow_blank=True, required=False)
-    image = serializers.ImageField()
+    image = serializers.ImageField(required=False)
     realtor = serializers.SerializerMethodField()
     realtor_email = serializers.SerializerMethodField()
     lat = serializers.DecimalField(max_digits=9, decimal_places=6)
@@ -23,6 +23,8 @@ class ApartmentSerializer(serializers.ModelSerializer):
         return obj.realtor.email
 
     def to_internal_value(self, data):
-        if ('lng' in data and 'lat' in data):
-            data['location'] = Point(float(data.get('lng')), float(data.get('lat')), srid=4326)
-        return data
+        new_data = data.copy()
+        if 'lng' in new_data and 'lat' in new_data:
+            new_data['location'] = Point(float(new_data.get('lng')), float(new_data.get('lat')), srid=4326)
+        return new_data
+    
