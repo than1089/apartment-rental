@@ -1,6 +1,9 @@
 # Apartment Rentals
 This is the Test Project for Toptal Interview
 
+## Demo
+https://tn-apartment-rental.herokuapp.com/
+
 ## Techincal stack
 - *Backend:* Django Rest Framework
 - *Frontend:* React + Redux
