@@ -1,5 +1,11 @@
 # Apartment Rentals
-This is the Test Project for Toptal Interview
+This is an MVP project with the full features needed for an apartment rental web app.
+
+Users can choose many login options from the login page: log in with a password, log in with Facebook, and log in with Google. If the user fails to log in three consecutive times, they will be blocked. The admin can manually unblock them in the Admin Dashboard.
+
+There are three accounts: normal users, agencies, and admins. Agencies can post apartments for rent. Admins can manage everything. Users can search for apartments by number of rooms, area, price range, etc. Search results can be shown in 2 views: list and map. With map view option, users can filter by distance to their locations.
+
+The challenging part of this project was using GeoDjango and PostGIS or SpatiaLite to store apartment longitudes and latitudes. Also, the GIS technology supports querying by distance compared to the preferred location.
 
 ## Demo
 https://tn-apartment-rental.herokuapp.com/
